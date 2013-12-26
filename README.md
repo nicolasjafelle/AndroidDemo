@@ -6,10 +6,10 @@ Demo app to show how to start an Android App. This demo shows how to create a Fr
 It also handle HTTP errors in a generic way (see FoursquareAsyncTask.java) and use GPSTracker to handle Geo locations.
 
 
-Instructions 1
+Instructions
 ============
 
-1. JustcClone the git repo
+1. Just Clone the git repo
 2. Import the "AndroidDemoApp" project into your Android Studio IDE.
 4. DONE
 
