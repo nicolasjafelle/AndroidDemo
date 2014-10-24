@@ -1,6 +1,5 @@
 package com.android.test.activity;
 
-import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,9 +11,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import roboguice.RoboGuice;
-import roboguice.activity.RoboFragmentActivity;
 
-public abstract class AbstractFragmentActivity extends RoboActionBarActivity {
+public abstract class AbstractActionBarActivity extends RoboActionBarActivity {
 
 	private FrameLayout mainLayout;
 
@@ -25,7 +23,7 @@ public abstract class AbstractFragmentActivity extends RoboActionBarActivity {
 			setInitialFragment();
 //		}
 
-        getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+//        getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 	}
 
 	/**
@@ -114,41 +112,41 @@ public abstract class AbstractFragmentActivity extends RoboActionBarActivity {
 //		fragmentTransaction.replace(mainLayout.getId(), newFragment).commit();
 //	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.onNavigationUpTask();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle item selection
+//        switch (item.getItemId()) {
+//            case android.R.id.home:
+//                this.onNavigationUpTask();
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
 
     /**
      * The idea is to override "getMenuResId" and
      * return the resource id of the wanted menu
      */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (this.getMenuResId()>0){
-            MenuInflater inflater = getMenuInflater();
-            inflater.inflate(this.getMenuResId(), menu);
-            return super.onCreateOptionsMenu(menu);
-        }
-        return super.onCreateOptionsMenu(menu);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        if (this.getMenuResId()>0){
+//            MenuInflater inflater = getMenuInflater();
+//            inflater.inflate(this.getMenuResId(), menu);
+//            return super.onCreateOptionsMenu(menu);
+//        }
+//        return super.onCreateOptionsMenu(menu);
+//    }
 
-    protected int getMenuResId(){
-        return -1;
-    }
-
-	/**
-	 * This method could and probably should be implemented to know how to handle when the user click
-	 * on the Home Button in the ActionBar.
-	 */
-    protected void onNavigationUpTask() {
-	    // Do nothing by default...
-    }
+//    protected int getMenuResId(){
+//        return -1;
+//    }
+//
+//	/**
+//	 * This method could and probably should be implemented to know how to handle when the user click
+//	 * on the Home Button in the ActionBar.
+//	 */
+//    protected void onNavigationUpTask() {
+//	    // Do nothing by default...
+//    }
 }

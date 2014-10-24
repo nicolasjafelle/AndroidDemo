@@ -29,22 +29,25 @@ import com.android.test.task.FoursquareAsyncTask;
 
 import java.util.List;
 
+import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectView;
 
 /**
  * MainFragment
  * Created by nicolas on 12/22/13.
  */
-public class MainFragment extends AbstractFragment implements AdapterView.OnItemClickListener {
+public class MainFragment extends AbstractFragment<MainFragment.Callback> {
+
+    public interface Callback {
+        void onResult(List<Venue> venues, Location currentLocation);
+    }
+
 
     @InjectView(R.id.fragment_main_edittext)
 	private EditText editText;
 
     @InjectView(R.id.fragment_main_button)
 	private Button searchButton;
-
-    @InjectView(R.id.fragment_main_listview)
-	private ListView listView;
 
 	private ProgressDialogFragment progressDialog;
 	private VenueDialogFragment venueDialogFragment;
@@ -66,20 +69,12 @@ public class MainFragment extends AbstractFragment implements AdapterView.OnItem
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
-        listView.setOnItemClickListener(this);
 
         progressDialog = ProgressDialogFragment.newInstance();
         venueDialogFragment = VenueDialogFragment.newInstance();
         gpsTracker = new GPSTracker(getActivity());
 
 		searchButton.setOnClickListener(onClickListener);
-	}
-
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		Venue venue = (Venue)parent.getItemAtPosition(position);
-		createVenueDialog(venue);
-
 	}
 
 	private void createProgressDialog(int resId) {
@@ -153,8 +148,10 @@ public class MainFragment extends AbstractFragment implements AdapterView.OnItem
 			if(venues == null && venues.size() > 0) {
 				Toast.makeText(getContext(), R.string.no_results_found, Toast.LENGTH_SHORT).show();
 			}else {
-				venueAdapter = new VenueAdapter(venues, currentLocation);
-				listView.setAdapter(venueAdapter);
+                callbacks.onResult(venues, currentLocation);
+
+//				venueAdapter = new VenueAdapter(venues, currentLocation);
+//				listView.setAdapter(venueAdapter);
 			}
 		}
 

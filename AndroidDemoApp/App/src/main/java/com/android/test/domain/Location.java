@@ -1,9 +1,13 @@
 package com.android.test.domain;
 
+import java.io.Serializable;
+
 /**
  * Created by nicolas on 12/22/13.
  */
-public class Location {
+public class Location implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
 	private String address;
 	private double lat;

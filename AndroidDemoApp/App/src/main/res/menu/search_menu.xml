@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:appCompat="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/ic_search"
+        android:title="@string/search"
+        appCompat:showAsAction="always"
+        android:icon="@drawable/ic_action_search"/>
+</menu>
