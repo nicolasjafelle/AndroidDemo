@@ -82,9 +82,9 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Venue venue = (Venue)parent.getItemAtPosition(position);
-//		createVenueDialog(venue);
+		createVenueDialog(venue);
 
-        callbacks.onItemClick(venue);
+//        callbacks.onItemClick(venue);
 
 	}
 

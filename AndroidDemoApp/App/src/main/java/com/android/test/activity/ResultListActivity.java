@@ -8,11 +8,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.android.test.R;
+import com.android.test.domain.Venue;
 import com.android.test.fragment.ResultListFragment;
 
 import roboguice.inject.InjectView;
 
-public class ResultListActivity extends AbstractActionBarActivity {
+public class ResultListActivity extends AbstractActionBarActivity implements ResultListFragment.Callback {
 
     @InjectView(R.id.material_toolbar)
     private Toolbar toolbar;
@@ -39,5 +40,11 @@ public class ResultListActivity extends AbstractActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onItemClick(Venue venue) {
+
     }
 }
