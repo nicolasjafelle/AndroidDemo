@@ -29,16 +29,23 @@ import com.android.test.task.FoursquareAsyncTask;
 
 import java.util.List;
 
+import roboguice.inject.InjectView;
+
 /**
  * MainFragment
  * Created by nicolas on 12/22/13.
  */
-public class MainFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class MainFragment extends AbstractFragment implements AdapterView.OnItemClickListener {
 
+    @InjectView(R.id.fragment_main_edittext)
 	private EditText editText;
+
+    @InjectView(R.id.fragment_main_button)
 	private Button searchButton;
 
+    @InjectView(R.id.fragment_main_listview)
 	private ListView listView;
+
 	private ProgressDialogFragment progressDialog;
 	private VenueDialogFragment venueDialogFragment;
 
@@ -52,22 +59,18 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_main, container, false);
-		editText = (EditText) view.findViewById(R.id.fragment_main_edittext);
-		searchButton = (Button) view.findViewById(R.id.fragment_main_button);
-		listView = (ListView) view.findViewById(R.id.fragment_main_listview);
-		listView.setOnItemClickListener(this);
-
-		progressDialog = ProgressDialogFragment.newInstance();
-		venueDialogFragment = VenueDialogFragment.newInstance();
-		gpsTracker = new GPSTracker(getActivity());
-
-		return view;
+        return inflater.inflate(R.layout.fragment_main, container, false);
 	}
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+
+        listView.setOnItemClickListener(this);
+
+        progressDialog = ProgressDialogFragment.newInstance();
+        venueDialogFragment = VenueDialogFragment.newInstance();
+        gpsTracker = new GPSTracker(getActivity());
 
 		searchButton.setOnClickListener(onClickListener);
 	}
