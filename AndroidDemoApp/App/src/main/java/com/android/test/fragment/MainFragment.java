@@ -4,6 +4,8 @@ import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,17 +44,18 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback> {
         void onResult(List<Venue> venues, Location currentLocation);
     }
 
-
     @InjectView(R.id.fragment_main_edittext)
 	private EditText editText;
 
     @InjectView(R.id.fragment_main_button)
 	private Button searchButton;
 
+
+
 	private ProgressDialogFragment progressDialog;
+
 	private VenueDialogFragment venueDialogFragment;
 
-	private VenueAdapter venueAdapter;
 
 	private GPSTracker gpsTracker;
 
@@ -112,6 +115,7 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback> {
 		super.onDestroy();
 		gpsTracker.stopUsingGPS();
 	}
+
 
 
 

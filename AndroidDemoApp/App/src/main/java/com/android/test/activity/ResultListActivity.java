@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.android.test.R;
@@ -36,7 +35,7 @@ public class ResultListActivity extends AbstractActionBarActivity implements Res
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                NavUtils.navigateUpTo(this, new Intent(this, MainActivity.class));
+                NavUtils.navigateUpTo(this, new Intent(this, SideBarActivity.class));
         }
 
         return super.onOptionsItemSelected(item);

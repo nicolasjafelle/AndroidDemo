@@ -13,5 +13,7 @@
 	<string name="no_results_found">No results found, write another place!</string>
 	<string name="unknown_error">Unknown error, try again in a few minutes!</string>
 	<string name="cancel">Cancel</string>
+	<string name="drawer_open">Drawer Open</string>
+	<string name="drawer_close">Drawer Close</string>
 
 </resources>
