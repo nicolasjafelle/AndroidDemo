@@ -1,47 +1,38 @@
 package com.android.test.fragment;
 
-import android.content.Context;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.android.test.R;
 import com.android.test.adapter.VenueAdapter;
-import com.android.test.client.FoursquareClient;
 import com.android.test.dialog.DialogFragmentHelper;
-import com.android.test.dialog.ProgressDialogFragment;
 import com.android.test.dialog.VenueDialogFragment;
 import com.android.test.domain.Venue;
-import com.android.test.dto.ErrorType;
-import com.android.test.dto.FoursquareApiErrorDto;
-import com.android.test.dto.VenueDto;
-import com.android.test.location.GPSTracker;
-import com.android.test.task.FoursquareAsyncTask;
 import com.android.test.utils.DataHelper;
-
-import java.util.List;
+import com.android.test.view.OverlayView;
+import com.melnykov.fab.FloatingActionButton;
+import android.location.Location;
+import android.widget.Toast;
 
 import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectView;
 
-/**
- * MainFragment
- * Created by nicolas on 12/22/13.
- */
-public class ResultListFragment extends AbstractFragment<ResultListFragment.Callback> implements AdapterView.OnItemClickListener {
+
+public class ResultListFragment extends AbstractFragment<ResultListFragment.Callback>
+        implements AdapterView.OnItemClickListener {
 
 
     public interface Callback {
         void onItemClick(Venue venue);
+        void onToolbarHide();
+        void onToolbarShow();
     }
 
     @InjectExtra(value = "LISTA", optional = true)
@@ -52,6 +43,9 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
 
     @InjectView(R.id.fragment_result_list_listview)
 	private ListView listView;
+
+    @InjectView(R.id.fragment_result_list_floating_button)
+    private FloatingActionButton fab;
 
 	private VenueDialogFragment venueDialogFragment;
 
@@ -71,26 +65,70 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
-        listView.setOnItemClickListener(this);
+
 
         venueDialogFragment = VenueDialogFragment.newInstance();
 
-        venueAdapter = new VenueAdapter(dataHelper.getList(), currentLocation);
-        listView.setAdapter(venueAdapter);
+        setupListView();
+        setupFab();
+
 	}
 
-	@Override
+    private void setupFab() {
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Work in Progress", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setupListView() {
+        listView.setOnItemClickListener(this);
+
+        OverlayView overlayView = new OverlayView(getActivity());
+        listView.addHeaderView(overlayView, null, false);
+
+        venueAdapter = new VenueAdapter(dataHelper.getList(), currentLocation);
+        listView.setAdapter(venueAdapter);
+
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            int lastFirstVisibleItem = 0;
+            boolean isShowing = true;
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                //Do nothing...
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (lastFirstVisibleItem < firstVisibleItem) {
+                    if(isShowing) {
+                        callbacks.onToolbarHide();
+                        fab.hide();
+                        isShowing = false;
+                    }
+                }
+
+                if (lastFirstVisibleItem > firstVisibleItem) {
+                    if(!isShowing) {
+                        callbacks.onToolbarShow();
+                        fab.show();
+                        isShowing = true;
+                    }
+                }
+                lastFirstVisibleItem = firstVisibleItem;
+            }
+        });
+    }
+
+    @Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Venue venue = (Venue)parent.getItemAtPosition(position);
 		createVenueDialog(venue);
 
 //        callbacks.onItemClick(venue);
 
-	}
-
-	private void createProgressDialog(int resId) {
-		Bundle arguments = new Bundle();
-		arguments.putString(ProgressDialogFragment.MESSAGE, getString(resId));
 	}
 
 	private void createVenueDialog(Venue venue) {

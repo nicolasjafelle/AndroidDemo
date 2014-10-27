@@ -46,11 +46,11 @@ public class SideBarActivity extends AbstractActionBarActivity implements MainFr
         setInitialFragment(R.layout.activity_side_bar, R.id.container, MainFragment.newInstance());
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.search_menu, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.search_menu, menu);
+//        return true;
+//    }
 
     private void setupSideBar() {
         if (toolbar != null) {
@@ -58,7 +58,6 @@ public class SideBarActivity extends AbstractActionBarActivity implements MainFr
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     if (drawerLayout.isDrawerOpen(Gravity.START)) {
                         drawerLayout.closeDrawer(Gravity.START);
                     } else {
@@ -69,15 +68,11 @@ public class SideBarActivity extends AbstractActionBarActivity implements MainFr
         }
 
 
-        drawerToggle = new ActionBarDrawerToggle(this,
-                drawerLayout,
-                R.string.drawer_open,
-                R.string.drawer_close) {
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close) {
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 supportInvalidateOptionsMenu();
             }
-
 
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
@@ -87,6 +82,15 @@ public class SideBarActivity extends AbstractActionBarActivity implements MainFr
 
         drawerLayout.setDrawerListener(drawerToggle);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(drawerLayout.isDrawerOpen(Gravity.START)) {
+            drawerLayout.closeDrawer(Gravity.START);
+        }else {
+            super.onBackPressed();
+        }
     }
 
     @Override

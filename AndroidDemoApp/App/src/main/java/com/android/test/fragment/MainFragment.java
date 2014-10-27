@@ -136,7 +136,7 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback> {
 		@Override
 		protected void onPreExecute() throws Exception {
 			super.onPreExecute();
-			createProgressDialog(R.string.connecting_to_server);
+			createProgressDialog(R.string.connecting_to_foursquare);
 		}
 
 		@Override
@@ -153,9 +153,6 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback> {
 				Toast.makeText(getContext(), R.string.no_results_found, Toast.LENGTH_SHORT).show();
 			}else {
                 callbacks.onResult(venues, currentLocation);
-
-//				venueAdapter = new VenueAdapter(venues, currentLocation);
-//				listView.setAdapter(venueAdapter);
 			}
 		}
 

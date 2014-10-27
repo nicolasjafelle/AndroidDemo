@@ -3,13 +3,13 @@
 
     <string name="app_name">Material Foursquare</string>
     <string name="hello_world">Hello world!</string>
-    <string name="type_your_criteria">Type your criteria</string>
-	<string name="edit_text_hint">Place in the world...</string>
+    <string name="type_your_criteria">Type some place in the world</string>
+	<string name="edit_text_hint">Place in the world…</string>
 	<string name="edit_text_empty">Please type a place</string>
 	<string name="search">Search</string>
     <string name="action_settings">Settings</string>
-	<string name="connection_error">There was a problem while connecting, try again in a few moments...</string>
-	<string name="connecting_to_server">Connecting to server...</string>
+	<string name="connection_error">There was a problem while connecting, try again in a few moments…</string>
+	<string name="connecting_to_foursquare">Connecting to Foursquare…</string>
 	<string name="no_results_found">No results found, write another place!</string>
 	<string name="unknown_error">Unknown error, try again in a few minutes!</string>
 	<string name="cancel">Cancel</string>

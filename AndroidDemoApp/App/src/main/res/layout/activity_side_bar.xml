@@ -20,8 +20,9 @@
     </LinearLayout>
     <ListView
         android:id="@+id/activity_main_drawer_layout_container"
-        android:layout_width="260dp"
+        android:layout_width="@dimen/side_bar_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/md_green_50"/>
+        android:background="#ff303030"
+        android:fitsSystemWindows="true"/>
 </android.support.v4.widget.DrawerLayout>
