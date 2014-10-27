@@ -15,19 +15,18 @@ import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 
 import retrofit.RetrofitError;
+import roboguice.util.RoboAsyncTask;
 
 /**
  * Created by nicolas on 12/22/13.
  */
-public abstract class FoursquareAsyncTask<T> extends SafeAsyncTask<T> {
+public abstract class FoursquareAsyncTask<T> extends RoboAsyncTask<T> {
 
-	private Context context;
+    protected FoursquareAsyncTask(Context context) {
+        super(context);
+    }
 
-	protected FoursquareAsyncTask(Context context) {
-		this.context = context;
-	}
-
-	@Override
+    @Override
 	protected void onException(Exception e) throws RuntimeException {
 		try {
 			if(e instanceof RetrofitError) {

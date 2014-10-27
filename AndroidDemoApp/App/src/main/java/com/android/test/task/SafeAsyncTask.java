@@ -15,6 +15,7 @@ import java.util.concurrent.FutureTask;
 
 
 /**
+ * DEPRECATED!!
  * A class similar but unrelated to android's {@link android.os.AsyncTask}.
  * <p/>
  * Unlike AsyncTask, this class properly propagates exceptions.
@@ -28,7 +29,9 @@ import java.util.concurrent.FutureTask;
  * If using your own executor, you must call future() to get a runnable you can execute.
  *
  * @param <ResultT>
+ *
  */
+@Deprecated
 public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
 	public static final int DEFAULT_POOL_SIZE = 25;
 	protected static final Executor DEFAULT_EXECUTOR = Executors.newFixedThreadPool(DEFAULT_POOL_SIZE);

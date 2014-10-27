@@ -1,10 +1,19 @@
 AndroidDemo
 ===========
 
-Demo app to show how to start an Android App. This demo shows how to create a Fragment and associate to an Activity, make Asynchronous call using SafeAsyncTask, connect to Foursquare's API using Retrofit with OkHttp and parse Json with Gson.
+Demo app to show how to start an Android App. This demo shows:
+1. How to create a Fragment and associate to an Activity.
+2. Make Asynchronous call using RoboAsyncTask.
+3. Make Roboguice compatible with ActionBarActivity
+4. Connect to Foursquare's API using Retrofit with OkHttp and parse Json with Gson.
+5. Material Design with latest AppCompat library (version 21) and animations like Google+.
+6. Side Bar implementation.
+7. Use of GPS.
+8. Persists data.
 
 It also handle HTTP errors in a generic way (see FoursquareAsyncTask.java) and use GPSTracker to handle Geo locations.
 
+UPDATED TO WORK WITH MATERIAL DESIGN.
 
 Instructions
 ============
@@ -17,10 +26,10 @@ Instructions
 System Requirements 
 ============
 
-1. Android Studio 0.4+
-2. Gradle 1.9+
+1. Android Studio 0.8.14
+2. Gradle 2.1+
 3. Minimun Android SDK 14
-4. Target Android SDK 19
+4. Target Android SDK 21
 
 
 Developed By
