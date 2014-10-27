@@ -4,6 +4,8 @@ import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,20 +31,31 @@ import com.android.test.task.FoursquareAsyncTask;
 
 import java.util.List;
 
+import roboguice.inject.InjectExtra;
+import roboguice.inject.InjectView;
+
 /**
  * MainFragment
  * Created by nicolas on 12/22/13.
  */
-public class MainFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class MainFragment extends AbstractFragment<MainFragment.Callback> {
 
+    public interface Callback {
+        void onResult(List<Venue> venues, Location currentLocation);
+    }
+
+    @InjectView(R.id.fragment_main_edittext)
 	private EditText editText;
+
+    @InjectView(R.id.fragment_main_button)
 	private Button searchButton;
 
-	private ListView listView;
+
+
 	private ProgressDialogFragment progressDialog;
+
 	private VenueDialogFragment venueDialogFragment;
 
-	private VenueAdapter venueAdapter;
 
 	private GPSTracker gpsTracker;
 
@@ -52,31 +65,19 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_main, container, false);
-		editText = (EditText) view.findViewById(R.id.fragment_main_edittext);
-		searchButton = (Button) view.findViewById(R.id.fragment_main_button);
-		listView = (ListView) view.findViewById(R.id.fragment_main_listview);
-		listView.setOnItemClickListener(this);
-
-		progressDialog = ProgressDialogFragment.newInstance();
-		venueDialogFragment = VenueDialogFragment.newInstance();
-		gpsTracker = new GPSTracker(getActivity());
-
-		return view;
+        return inflater.inflate(R.layout.fragment_main, container, false);
 	}
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
+
+        progressDialog = ProgressDialogFragment.newInstance();
+        venueDialogFragment = VenueDialogFragment.newInstance();
+        gpsTracker = new GPSTracker(getActivity());
+
 		searchButton.setOnClickListener(onClickListener);
-	}
-
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		Venue venue = (Venue)parent.getItemAtPosition(position);
-		createVenueDialog(venue);
-
 	}
 
 	private void createProgressDialog(int resId) {
@@ -117,6 +118,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
 
 
 
+
 	/**
 	 * VenueTask
 	 */
@@ -134,7 +136,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
 		@Override
 		protected void onPreExecute() throws Exception {
 			super.onPreExecute();
-			createProgressDialog(R.string.connecting_to_server);
+			createProgressDialog(R.string.connecting_to_foursquare);
 		}
 
 		@Override
@@ -150,8 +152,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
 			if(venues == null && venues.size() > 0) {
 				Toast.makeText(getContext(), R.string.no_results_found, Toast.LENGTH_SHORT).show();
 			}else {
-				venueAdapter = new VenueAdapter(venues, currentLocation);
-				listView.setAdapter(venueAdapter);
+                callbacks.onResult(venues, currentLocation);
 			}
 		}
 

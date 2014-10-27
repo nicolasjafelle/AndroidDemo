@@ -34,7 +34,7 @@ public class FoursquareClient {
 		if (restAdapter == null || foursquareClient == null) {
 
 			restAdapter = new RestAdapter.Builder()
-				.setServer(BASE_URL)
+				.setEndpoint(BASE_URL)
 				.setLogLevel(RestAdapter.LogLevel.FULL)
 				.build();
 
