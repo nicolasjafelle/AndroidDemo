@@ -2,6 +2,7 @@ AndroidDemo
 ===========
 
 Demo app to show how to start an Android App. This demo shows:
+
 1. How to create a Fragment and associate to an Activity.
 2. Make Asynchronous call using RoboAsyncTask.
 3. Make Roboguice compatible with ActionBarActivity
