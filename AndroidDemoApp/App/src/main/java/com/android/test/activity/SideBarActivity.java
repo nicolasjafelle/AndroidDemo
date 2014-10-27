@@ -11,17 +11,26 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.android.test.R;
 import com.android.test.domain.Venue;
 import com.android.test.fragment.MainFragment;
+import com.android.test.fragment.ResultListFragment;
 import com.android.test.utils.DataHelper;
+import com.android.test.view.SideBarCallback;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import roboguice.inject.InjectView;
 
-public class SideBarActivity extends AbstractActionBarActivity implements MainFragment.Callback {
+public class SideBarActivity extends AbstractActionBarActivity implements MainFragment.Callback, AdapterView.OnItemClickListener {
 
     @InjectView(R.id.material_toolbar)
     private Toolbar toolbar;
@@ -29,7 +38,11 @@ public class SideBarActivity extends AbstractActionBarActivity implements MainFr
     @InjectView(R.id.activity_main_drawer_layout)
     private DrawerLayout drawerLayout;
 
+    @InjectView(R.id.activity_side_bar_list_view)
+    private ListView listView;
+
     private ActionBarDrawerToggle drawerToggle;
+    private SideBarCallback sideBarCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +131,7 @@ public class SideBarActivity extends AbstractActionBarActivity implements MainFr
     }
 
     @Override
-    public void onResult(List<Venue> venues, Location currentLocation) {
+    public void onResult(List<Venue> venues, Location currentLocation, String place) {
 //        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, transitionView, EXTRA_IMAGE);
 //        Intent intent = new Intent(this, ResultListActivity.class);
 //        intent.putExtra(EXTRA_IMAGE, url);
@@ -126,13 +139,30 @@ public class SideBarActivity extends AbstractActionBarActivity implements MainFr
 
         Intent intent = new Intent(this, ResultListActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("LISTA", new DataHelper(venues));
+        bundle.putSerializable(ResultListFragment.DATA_HELPER, new DataHelper(venues));
+        bundle.putString(ResultListFragment.PLACE, place);
+
         if(currentLocation != null) {
-            bundle.putParcelable("LOCATION", currentLocation);
+            bundle.putParcelable(ResultListFragment.LOCATION, currentLocation);
         }
 
         intent.putExtras(bundle);
         startActivity(intent);
-//        ActivityCompat.startActivity(this, intent, bundle);
+    }
+
+    @Override
+    public void loadSavedPlaces(Set<String> savedPlaces, SideBarCallback sideBarCallback) {
+        this.sideBarCallback = sideBarCallback;
+        listView.setOnItemClickListener(this);
+        List<String> list = new ArrayList<String>(savedPlaces);
+        ArrayAdapter<String> savedPlacesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, list);
+        listView.setAdapter(savedPlacesAdapter);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        String place = (String) parent.getItemAtPosition(position);
+        this.sideBarCallback.onSideBarItemClick(place);
+        drawerLayout.closeDrawer(Gravity.START);
     }
 }

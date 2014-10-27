@@ -2,6 +2,7 @@ package com.android.test.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -39,8 +40,14 @@ public class OverlayView extends View {
 
         final TypedArray styledAttributes = getContext().getTheme().obtainStyledAttributes(
                 new int[] { android.R.attr.actionBarSize });
-//        float height = styledAttributes.getDimension(0, 0) + getContext().getResources().getDimension(R.dimen.main_separation);
-        float height = styledAttributes.getDimension(0, 0);
+
+        float height;
+        if(Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
+            height = styledAttributes.getDimension(0, 0);
+        }else {
+            height = styledAttributes.getDimension(0, 0) + getContext().getResources().getDimension(R.dimen.main_separation);
+        }
+
         this.setMinimumHeight((int)height);
         styledAttributes.recycle();
 

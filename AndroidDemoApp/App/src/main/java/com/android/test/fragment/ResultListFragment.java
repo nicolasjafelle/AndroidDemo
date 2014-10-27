@@ -2,7 +2,6 @@ package com.android.test.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +14,14 @@ import com.android.test.adapter.VenueAdapter;
 import com.android.test.dialog.DialogFragmentHelper;
 import com.android.test.dialog.VenueDialogFragment;
 import com.android.test.domain.Venue;
+import com.android.test.session.SessionManager;
 import com.android.test.utils.DataHelper;
 import com.android.test.view.OverlayView;
 import com.melnykov.fab.FloatingActionButton;
 import android.location.Location;
 import android.widget.Toast;
+
+import javax.inject.Inject;
 
 import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectView;
@@ -28,6 +30,9 @@ import roboguice.inject.InjectView;
 public class ResultListFragment extends AbstractFragment<ResultListFragment.Callback>
         implements AdapterView.OnItemClickListener {
 
+    public static final String DATA_HELPER = "data_helper";
+    public static final String PLACE = "place";
+    public static final String LOCATION = "location";
 
     public interface Callback {
         void onItemClick(Venue venue);
@@ -35,10 +40,13 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
         void onToolbarShow();
     }
 
-    @InjectExtra(value = "LISTA", optional = true)
+    @InjectExtra(value = DATA_HELPER, optional = true)
     private DataHelper dataHelper;
 
-    @InjectExtra(value = "LOCATION", optional = true)
+    @InjectExtra(value = PLACE, optional = true)
+    private String place;
+
+    @InjectExtra(value = LOCATION, optional = true)
     private Location currentLocation;
 
     @InjectView(R.id.fragment_result_list_listview)
@@ -46,6 +54,9 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
 
     @InjectView(R.id.fragment_result_list_floating_button)
     private FloatingActionButton fab;
+
+    @Inject
+    private SessionManager sessionManager;
 
 	private VenueDialogFragment venueDialogFragment;
 
@@ -78,7 +89,10 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Work in Progress", Toast.LENGTH_SHORT).show();
+                sessionManager.savePlace(place);
+
+                Toast.makeText(getActivity(), getString(R.string.location_saved_open_the_side_bar_to_see_it, place),
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -131,7 +145,7 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
 
 	}
 
-	private void createVenueDialog(Venue venue) {
+    private void createVenueDialog(Venue venue) {
 		Bundle arguments = new Bundle();
 		arguments.putSerializable(VenueDialogFragment.SELECTED_VENUE, venue);
 		DialogFragmentHelper.show(getActivity(), venueDialogFragment, arguments);

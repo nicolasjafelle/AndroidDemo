@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Material Foursquare</string>
+    <string name="app_name">Material Demo</string>
     <string name="hello_world">Hello world!</string>
     <string name="type_your_criteria">Type some place in the world</string>
 	<string name="edit_text_hint">Place in the world…</string>
@@ -15,5 +15,6 @@
 	<string name="cancel">Cancel</string>
 	<string name="drawer_open">Drawer Open</string>
 	<string name="drawer_close">Drawer Close</string>
+    <string name="location_saved_open_the_side_bar_to_see_it">%1$s saved! Open the side bar to see it</string>
 
 </resources>

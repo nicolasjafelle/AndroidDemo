@@ -27,9 +27,14 @@ import com.android.test.dto.ErrorType;
 import com.android.test.dto.FoursquareApiErrorDto;
 import com.android.test.dto.VenueDto;
 import com.android.test.location.GPSTracker;
+import com.android.test.session.SessionManager;
 import com.android.test.task.FoursquareAsyncTask;
+import com.android.test.view.SideBarCallback;
 
 import java.util.List;
+import java.util.Set;
+
+import javax.inject.Inject;
 
 import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectView;
@@ -38,10 +43,11 @@ import roboguice.inject.InjectView;
  * MainFragment
  * Created by nicolas on 12/22/13.
  */
-public class MainFragment extends AbstractFragment<MainFragment.Callback> {
+public class MainFragment extends AbstractFragment<MainFragment.Callback> implements SideBarCallback {
 
     public interface Callback {
-        void onResult(List<Venue> venues, Location currentLocation);
+        void onResult(List<Venue> venues, Location currentLocation, String place);
+        void loadSavedPlaces(Set<String> savedPlaces, SideBarCallback sideBarCallback);
     }
 
     @InjectView(R.id.fragment_main_edittext)
@@ -50,11 +56,10 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback> {
     @InjectView(R.id.fragment_main_button)
 	private Button searchButton;
 
-
+    @Inject
+    private SessionManager sessionManager;
 
 	private ProgressDialogFragment progressDialog;
-
-	private VenueDialogFragment venueDialogFragment;
 
 
 	private GPSTracker gpsTracker;
@@ -72,43 +77,58 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback> {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
-
         progressDialog = ProgressDialogFragment.newInstance();
-        venueDialogFragment = VenueDialogFragment.newInstance();
         gpsTracker = new GPSTracker(getActivity());
 
 		searchButton.setOnClickListener(onClickListener);
 	}
 
-	private void createProgressDialog(int resId) {
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadSavedPlaces();
+    }
+
+    private void createProgressDialog(int resId) {
 		Bundle arguments = new Bundle();
 		arguments.putString(ProgressDialogFragment.MESSAGE, getString(resId));
 		DialogFragmentHelper.show(getActivity(), progressDialog, arguments);
 	}
 
-	private void createVenueDialog(Venue venue) {
-		Bundle arguments = new Bundle();
-		arguments.putSerializable(VenueDialogFragment.SELECTED_VENUE, venue);
-		DialogFragmentHelper.show(getActivity(), venueDialogFragment, arguments);
-	}
-
 	private View.OnClickListener onClickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			String criteria = editText.getText().toString().trim();
+			String place = editText.getText().toString().trim();
 
-			if(criteria == null || criteria.length() == 0) {
+			if(place == null || place.length() == 0) {
 				Toast.makeText(getActivity(), R.string.edit_text_empty, Toast.LENGTH_SHORT).show();
 			}else {
 				// check if GPS enabled
 				if(gpsTracker.canGetLocation()){
-					new VenueTask(getActivity(), criteria, gpsTracker.getLocation()).execute();
+					new VenueTask(getActivity(), place, gpsTracker.getLocation()).execute();
 				}else{
 					gpsTracker.showSettingsAlert();
 				}
 			}
 		}
 	};
+
+    @Override
+    public void onSideBarItemClick(String text) {
+        if(gpsTracker.canGetLocation()){
+            new VenueTask(getActivity(), text, gpsTracker.getLocation()).execute();
+        }else{
+            gpsTracker.showSettingsAlert();
+        }
+    }
+
+    private void loadSavedPlaces() {
+        Set<String> savedPlaces = sessionManager.getSavedPlaces();
+
+        if(!savedPlaces.isEmpty()) {
+            callbacks.loadSavedPlaces(savedPlaces, this);
+        }
+    }
 
 	@Override
 	public void onDestroy() {
@@ -152,7 +172,7 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback> {
 			if(venues == null && venues.size() > 0) {
 				Toast.makeText(getContext(), R.string.no_results_found, Toast.LENGTH_SHORT).show();
 			}else {
-                callbacks.onResult(venues, currentLocation);
+                callbacks.onResult(venues, currentLocation, criteria);
 			}
 		}
 

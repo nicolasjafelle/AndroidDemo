@@ -19,7 +19,7 @@
             android:layout_height="match_parent"/>
     </LinearLayout>
     <ListView
-        android:id="@+id/activity_main_drawer_layout_container"
+        android:id="@+id/activity_side_bar_list_view"
         android:layout_width="@dimen/side_bar_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
