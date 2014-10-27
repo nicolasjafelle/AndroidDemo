@@ -13,7 +13,7 @@ Demo app to show how to start an Android App. This demo shows:
 
 It also handle HTTP errors in a generic way (see FoursquareAsyncTask.java) and use GPSTracker to handle Geo locations.
 
-UPDATED TO WORK WITH MATERIAL DESIGN.
+**UPDATED TO WORK WITH MATERIAL DESIGN, WORK IN PROGRESS**
 
 Instructions
 ============
