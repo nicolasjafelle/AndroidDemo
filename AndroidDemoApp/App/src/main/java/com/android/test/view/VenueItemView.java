@@ -1,7 +1,9 @@
 package com.android.test.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.location.Location;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
@@ -88,4 +90,20 @@ public class VenueItemView extends RelativeLayout {
 			distanceView.setText(String.format("%.2f Km", km));
 		}
 	}
+
+    public void setFirst() {
+
+        final TypedArray styledAttributes = getContext().getTheme().obtainStyledAttributes(
+                new int[] { android.R.attr.actionBarSize });
+
+        float height;
+        if(Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
+            height = styledAttributes.getDimension(0, 0);
+        }else {
+            height = styledAttributes.getDimension(0, 0) + getContext().getResources().getDimension(R.dimen.main_separation);
+        }
+
+        this.setPadding(0, (int)height, 0, 0);
+        styledAttributes.recycle();
+    }
 }

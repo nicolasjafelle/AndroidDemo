@@ -2,21 +2,23 @@ package com.android.test.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ListView;
 
 import com.android.test.R;
 import com.android.test.adapter.VenueAdapter;
+import com.android.test.adapter.VenueRecyclerAdapter;
 import com.android.test.dialog.DialogFragmentHelper;
 import com.android.test.dialog.VenueDialogFragment;
 import com.android.test.domain.Venue;
 import com.android.test.session.SessionManager;
 import com.android.test.utils.DataHelper;
-import com.android.test.view.OverlayView;
 import com.melnykov.fab.FloatingActionButton;
 import android.location.Location;
 import android.widget.Toast;
@@ -28,11 +30,13 @@ import roboguice.inject.InjectView;
 
 
 public class ResultListFragment extends AbstractFragment<ResultListFragment.Callback>
-        implements AdapterView.OnItemClickListener {
+        implements AdapterView.OnItemClickListener, VenueRecyclerAdapter.RecyclerViewListener {
 
     public static final String DATA_HELPER = "data_helper";
     public static final String PLACE = "place";
     public static final String LOCATION = "location";
+
+
 
     public interface Callback {
         void onItemClick(Venue venue);
@@ -49,8 +53,8 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
     @InjectExtra(value = LOCATION, optional = true)
     private Location currentLocation;
 
-    @InjectView(R.id.fragment_result_list_listview)
-	private ListView listView;
+//    @InjectView(R.id.fragment_result_list_listview)
+//	private ListView listView;
 
     @InjectView(R.id.fragment_result_list_floating_button)
     private FloatingActionButton fab;
@@ -60,7 +64,13 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
 
 	private VenueDialogFragment venueDialogFragment;
 
-	private VenueAdapter venueAdapter;
+//	private VenueAdapter venueAdapter;
+
+    // RecyclerView impl
+    @InjectView(R.id.fragment_result_list_recyclerview)
+    private RecyclerView recyclerView;
+
+    private VenueRecyclerAdapter mAdapter;
 
 
 	public static Fragment newInstance() {
@@ -80,7 +90,8 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
 
         venueDialogFragment = VenueDialogFragment.newInstance();
 
-        setupListView();
+        setupRecyclerView();
+//        setupListView();
         setupFab();
 
 	}
@@ -97,44 +108,99 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
         });
     }
 
-    private void setupListView() {
-        listView.setOnItemClickListener(this);
+    private void setupRecyclerView() {
+        recyclerView.setHasFixedSize(true);
 
-        OverlayView overlayView = new OverlayView(getActivity());
-        listView.addHeaderView(overlayView, null, false);
+        // use a linear layout manager
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        venueAdapter = new VenueAdapter(dataHelper.getList(), currentLocation);
-        listView.setAdapter(venueAdapter);
+        // specify an adapter (see also next example)
+        mAdapter = new VenueRecyclerAdapter(dataHelper.getList(), currentLocation, this);
+        recyclerView.setAdapter(mAdapter);
 
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            int lastFirstVisibleItem = 0;
+
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             boolean isShowing = true;
+
             @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                //Do nothing...
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
             }
 
             @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (lastFirstVisibleItem < firstVisibleItem) {
-                    if(isShowing) {
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if (dy > 0) {
+                    if (isShowing) {
                         callbacks.onToolbarHide();
                         fab.hide();
                         isShowing = false;
                     }
-                }
-
-                if (lastFirstVisibleItem > firstVisibleItem) {
-                    if(!isShowing) {
+                } else {
+                    if (!isShowing) {
                         callbacks.onToolbarShow();
                         fab.show();
                         isShowing = true;
                     }
                 }
-                lastFirstVisibleItem = firstVisibleItem;
             }
         });
     }
+
+    @Override
+    public void onItemClickListener(View view, int position) {
+        Venue venue = mAdapter.getItemAtPosition(position);
+        createVenueDialog(venue);
+    }
+
+    /**
+     * Commented but not removed in order to first improves RecyclerView features.
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     */
+//    private void setupListView() {
+//        listView.setOnItemClickListener(this);
+//
+//        OverlayView overlayView = new OverlayView(getActivity());
+//        listView.addHeaderView(overlayView, null, false);
+//
+//        venueAdapter = new VenueAdapter(dataHelper.getList(), currentLocation);
+//        listView.setAdapter(venueAdapter);
+//
+//        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+//            int lastFirstVisibleItem = 0;
+//            boolean isShowing = true;
+//            @Override
+//            public void onScrollStateChanged(AbsListView view, int scrollState) {
+//                //Do nothing...
+//            }
+//
+//            @Override
+//            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+//                if (lastFirstVisibleItem < firstVisibleItem) {
+//                    if(isShowing) {
+//                        callbacks.onToolbarHide();
+//                        fab.hide();
+//                        isShowing = false;
+//                    }
+//                }
+//
+//                if (lastFirstVisibleItem > firstVisibleItem) {
+//                    if(!isShowing) {
+//                        callbacks.onToolbarShow();
+//                        fab.show();
+//                        isShowing = true;
+//                    }
+//                }
+//                lastFirstVisibleItem = firstVisibleItem;
+//            }
+//        });
+//    }
 
     @Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

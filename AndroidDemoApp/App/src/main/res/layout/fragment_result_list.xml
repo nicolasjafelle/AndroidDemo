@@ -4,11 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 	android:orientation="vertical">
-	<ListView
-		android:id="@+id/fragment_result_list_listview"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-        android:divider="@null"/>
+	<!--<ListView-->
+		<!--android:id="@+id/fragment_result_list_listview"-->
+		<!--android:layout_width="match_parent"-->
+		<!--android:layout_height="match_parent"-->
+        <!--android:divider="@null"/>-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fragment_result_list_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"/>
     <com.melnykov.fab.FloatingActionButton
         android:id="@+id/fragment_result_list_floating_button"
         android:layout_width="wrap_content"
