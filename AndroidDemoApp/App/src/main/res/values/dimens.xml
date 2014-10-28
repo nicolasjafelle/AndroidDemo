@@ -8,4 +8,6 @@
     <dimen name="side_bar_width">260dp</dimen>
     <dimen name="main_separation_half">15dp</dimen>
     <dimen name="card_ui_height">200dp</dimen>
+    <dimen name="half_base_separation">5dp</dimen>
+    <dimen name="image_view_height">150dp</dimen>
 </resources>

@@ -6,26 +6,24 @@
     android:layout_marginRight="@dimen/main_separation"
     android:layout_marginLeft="@dimen/main_separation"
     android:layout_marginTop="@dimen/main_separation"
-    android:padding="10dp">
+    android:padding="@dimen/main_separation">
     <ImageView
         android:id="@+id/venue_item_abstract_image"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="@dimen/image_view_height"
         android:background="@color/md_green_50"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="5dp"/>
+        android:layout_marginBottom="@dimen/half_base_separation"/>
 	<TextView
 		android:id="@+id/venue_item_name"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-        android:text="PEPE"
         android:textColor="@color/gray"
         android:layout_below="@id/venue_item_abstract_image"/>
 	<TextView
 		android:id="@+id/venue_item_distance"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-        android:text="PEPE2"
         android:layout_alignParentRight="true"
         android:textColor="@color/gray"
         android:layout_below="@id/venue_item_abstract_image"/>
