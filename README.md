@@ -9,8 +9,9 @@ Demo app to show how to start an Android App. This demo shows:
 4. Connect to Foursquare's API using Retrofit with OkHttp and parse Json with Gson.
 5. Material Design with latest AppCompat library (version 21) and animations like Google+.
 6. Side Bar implementation.
-7. Use of GPS.
-8. Persists data.
+7. RecyclerView implementation with onClickListener, View Types and OnScrollListener
+8. Use of GPS.
+9. Persists data.
 
 It also handle HTTP errors in a generic way (see FoursquareAsyncTask.java) and use GPSTracker to handle Geo locations.
 
