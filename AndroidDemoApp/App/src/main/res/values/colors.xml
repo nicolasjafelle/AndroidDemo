@@ -17,6 +17,7 @@
 <resources>
     <color name="windowBackgroundColor">#333333</color>
     <color name="black_translucent">#80000000</color>
+    <color name="gray">#464646</color>
 
 
     <color name="md_green_50">#d0f8ce</color>

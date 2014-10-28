@@ -14,6 +14,7 @@ import android.view.animation.Interpolator;
 import com.android.test.R;
 import com.android.test.domain.Venue;
 import com.android.test.fragment.ResultListFragment;
+import com.bumptech.glide.Glide;
 
 import roboguice.inject.InjectView;
 
@@ -57,8 +58,6 @@ public class ResultListActivity extends AbstractActionBarActivity implements Res
     public void onItemClick(Venue venue) {
 
     }
-
-
 
     @Override
     public void onToolbarHide() {
