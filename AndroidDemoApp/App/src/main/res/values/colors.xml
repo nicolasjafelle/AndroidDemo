@@ -19,7 +19,6 @@
     <color name="black_translucent">#80000000</color>
     <color name="gray">#464646</color>
 
-
     <color name="md_green_50">#d0f8ce</color>
     <color name="md_green_100">#a3e9a4</color>
     <color name="md_green_200">#72d572</color>
@@ -34,4 +33,6 @@
     <color name="md_green_A200">#5af158</color>
     <color name="md_green_A400">#14e715</color>
     <color name="md_green_A700">#12c700</color>
+
+    <color name="alpha_md_green_400">#802baf2b</color>
 </resources>
