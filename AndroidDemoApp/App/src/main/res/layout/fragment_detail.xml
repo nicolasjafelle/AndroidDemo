@@ -1,25 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ImageView
-        android:id="@+id/fragment_detail_image_view"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:background="@color/md_green_50"
-        android:scaleType="centerCrop"/>
-    <TextView
-        android:id="@+id/fragment_detail_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/fragment_detail_image_view"
-        style="@style/detail_text_style"/>
-    <TextView
-        android:id="@+id/fragment_detail_distance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/detail_text_style"
-        android:layout_below="@id/fragment_detail_name"/>
-</RelativeLayout>
+        android:layout_height="match_parent"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/fragment_detail_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:background="@color/md_green_50"
+                android:scaleType="centerCrop"/>
+            <TextView
+                android:id="@+id/fragment_detail_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/fragment_detail_image_view"
+                style="@style/detail_text_style"/>
+            <TextView
+                android:id="@+id/fragment_detail_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/detail_text_style"
+                android:layout_below="@id/fragment_detail_name"/>
+        </RelativeLayout>
+    </ScrollView>
+
+</FrameLayout>
