@@ -10,4 +10,9 @@
         <item name="windowActionBar">false</item>
     </style>
 
+    <style name="detail_text_style">
+        <item name="android:textSize">20dp</item>
+        <item name="android:layout_margin">@dimen/main_separation</item>
+    </style>
+
 </resources>

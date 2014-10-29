@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by nicolas on 12/22/13.
  */
-public class Venue implements Serializable{
+public class Venue implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

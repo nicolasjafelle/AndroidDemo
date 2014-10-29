@@ -39,7 +39,7 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
 
 
     public interface Callback {
-        void onItemClick(Venue venue);
+        void onItemClick(Venue venue, View view, String url);
         void onToolbarHide();
         void onToolbarShow();
     }
@@ -153,7 +153,10 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
     @Override
     public void onItemClickListener(View view, int position) {
         Venue venue = mAdapter.getItemAtPosition(position);
-        createVenueDialog(venue);
+
+        String url = (String) view.getTag();
+
+        callbacks.onItemClick(venue, view, url);
     }
 
     /**

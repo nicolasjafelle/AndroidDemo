@@ -27,7 +27,7 @@ import roboguice.inject.InjectView;
  */
 public class VenueItemView extends RelativeLayout {
 
-    private String RANDOM_IMAGE_URL = "http://lorempixel.com/640/480/abstract/";
+    private String RANDOM_IMAGE_URL = "http://lorempixel.com/600/480/abstract/";
 
     @InjectView(R.id.venue_item_name)
 	private TextView nameView;
@@ -72,12 +72,11 @@ public class VenueItemView extends RelativeLayout {
 	public void fillData(Venue venue, Location currentLocation) {
 
 
-
+        setTag(RANDOM_IMAGE_URL);
 		nameView.setText(venue.getName());
 
         Glide.with(getContext())
                 .load(RANDOM_IMAGE_URL)
-                .centerCrop()
                 .crossFade()
                 .into(randomImage);
 
@@ -87,9 +86,19 @@ public class VenueItemView extends RelativeLayout {
 				venue.getLocation().getLat(), venue.getLocation().getLng(), results);
 
 			double km = results[0] / 1000;
-			distanceView.setText(String.format("%.2f Km", km));
+            String distance = String.format("%.2f Km", km);
+
+			distanceView.setText(distance);
 		}
 	}
+
+    public String getDistanceText() {
+        return this.distanceView.getText().toString();
+    }
+
+    public String getNameText() {
+        return this.nameView.getText().toString();
+    }
 
     public void setFirst() {
 

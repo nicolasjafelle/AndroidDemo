@@ -18,7 +18,8 @@
             android:layout_height="@dimen/image_view_height"
             android:background="@color/md_green_50"
             android:layout_alignParentTop="true"
-            android:layout_marginBottom="@dimen/half_base_separation"/>
+            android:layout_marginBottom="@dimen/half_base_separation"
+            android:scaleType="centerCrop"/>
         <TextView
             android:id="@+id/venue_item_name"
             android:layout_width="wrap_content"
