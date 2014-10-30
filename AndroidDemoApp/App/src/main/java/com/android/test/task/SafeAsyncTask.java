@@ -159,6 +159,10 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
 	protected void onFinally() throws RuntimeException {
 	}
 
+    public boolean isCancelled(){
+        return future == null ? false : future.isCancelled();
+    }
+
 
 	protected Task<ResultT> newTask() {
 		return new Task<ResultT>(this);

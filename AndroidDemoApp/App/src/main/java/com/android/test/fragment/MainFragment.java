@@ -2,7 +2,7 @@ package com.android.test.fragment;
 
 import android.content.Context;
 import android.location.Location;
-import android.os.*;
+import android.os.Bundle;
 import android.os.Process;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;

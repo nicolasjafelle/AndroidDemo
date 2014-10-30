@@ -5,7 +5,6 @@ import android.content.res.TypedArray;
 import android.location.Location;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -17,7 +16,6 @@ import com.bumptech.glide.Glide;
 
 import java.util.Random;
 
-import roboguice.RoboGuice;
 import roboguice.inject.InjectView;
 
 /**

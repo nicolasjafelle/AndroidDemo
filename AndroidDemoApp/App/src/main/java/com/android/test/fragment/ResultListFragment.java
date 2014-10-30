@@ -51,24 +51,19 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
     @InjectExtra(value = LOCATION, optional = true)
     private Location currentLocation;
 
-//    @InjectView(R.id.fragment_result_list_listview)
-//	private ListView listView;
-
     @InjectView(R.id.fragment_result_list_floating_button)
     private FloatingActionButton fab;
+
+    // RecyclerView impl
+    @InjectView(R.id.fragment_result_list_recyclerview)
+    private RecyclerView recyclerView;
 
     @Inject
     private SessionManager sessionManager;
 
 	private VenueDialogFragment venueDialogFragment;
 
-//	private VenueAdapter venueAdapter;
-
-    // RecyclerView impl
-    @InjectView(R.id.fragment_result_list_recyclerview)
-    private RecyclerView recyclerView;
-
-    private VenueRecyclerAdapter mAdapter;
+    private VenueRecyclerAdapter adapter;
 
 
 	public static Fragment newInstance() {
@@ -83,13 +78,9 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-
-
-
         venueDialogFragment = VenueDialogFragment.newInstance();
 
         setupRecyclerView();
-//        setupListView();
         setupFab();
 
 	}
@@ -114,9 +105,8 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        // specify an adapter (see also next example)
-        mAdapter = new VenueRecyclerAdapter(dataHelper.getList(), currentLocation, this);
-        recyclerView.setAdapter(mAdapter);
+        adapter = new VenueRecyclerAdapter(dataHelper.getList(), currentLocation, this);
+        recyclerView.setAdapter(adapter);
 
 
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -150,66 +140,18 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
 
     @Override
     public void onItemClickListener(View view, int position) {
-        Venue venue = mAdapter.getItemAtPosition(position);
-
+        Venue venue = adapter.getItemAtPosition(position);
         String url = (String) view.getTag();
 
         callbacks.onItemClick(venue, view, url);
     }
 
-    /**
-     * Commented but not removed in order to first improves RecyclerView features.
-     * @param parent
-     * @param view
-     * @param position
-     * @param id
-     */
-//    private void setupListView() {
-//        listView.setOnItemClickListener(this);
-//
-//        OverlayView overlayView = new OverlayView(getActivity());
-//        listView.addHeaderView(overlayView, null, false);
-//
-//        venueAdapter = new VenueAdapter(dataHelper.getList(), currentLocation);
-//        listView.setAdapter(venueAdapter);
-//
-//        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-//            int lastFirstVisibleItem = 0;
-//            boolean isShowing = true;
-//            @Override
-//            public void onScrollStateChanged(AbsListView view, int scrollState) {
-//                //Do nothing...
-//            }
-//
-//            @Override
-//            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-//                if (lastFirstVisibleItem < firstVisibleItem) {
-//                    if(isShowing) {
-//                        callbacks.onToolbarHide();
-//                        fab.hide();
-//                        isShowing = false;
-//                    }
-//                }
-//
-//                if (lastFirstVisibleItem > firstVisibleItem) {
-//                    if(!isShowing) {
-//                        callbacks.onToolbarShow();
-//                        fab.show();
-//                        isShowing = true;
-//                    }
-//                }
-//                lastFirstVisibleItem = firstVisibleItem;
-//            }
-//        });
-//    }
+
 
     @Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Venue venue = (Venue)parent.getItemAtPosition(position);
 		createVenueDialog(venue);
-
-//        callbacks.onItemClick(venue);
-
 	}
 
     private void createVenueDialog(Venue venue) {

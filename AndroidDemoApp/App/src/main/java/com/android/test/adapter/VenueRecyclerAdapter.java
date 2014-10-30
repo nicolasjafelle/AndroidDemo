@@ -52,7 +52,6 @@ public class VenueRecyclerAdapter extends RecyclerView.Adapter<VenueRecyclerAdap
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         final Venue rowData = venues.get(position);
         viewHolder.venueItemView.fillData(rowData, currentLocation);
-//        viewHolder.itemView.setTag(rowData);
     }
 
     @Override

@@ -14,6 +14,7 @@ import java.util.List;
  * VenueAdapter
  * Created by nicolas on 12/22/13.
  */
+@Deprecated
 public class VenueAdapter extends BaseAdapter {
 
 	private List<Venue> venues;

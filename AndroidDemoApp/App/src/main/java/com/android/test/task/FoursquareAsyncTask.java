@@ -15,7 +15,6 @@ import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 
 import retrofit.RetrofitError;
-import roboguice.activity.event.OnPauseEvent;
 import roboguice.context.event.OnDestroyEvent;
 import roboguice.event.Observes;
 import roboguice.util.RoboAsyncTask;
