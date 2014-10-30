@@ -1,18 +1,18 @@
 package com.android.test.fragment;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.android.test.R;
-import com.android.test.adapter.VenueAdapter;
 import com.android.test.adapter.VenueRecyclerAdapter;
 import com.android.test.dialog.DialogFragmentHelper;
 import com.android.test.dialog.VenueDialogFragment;
@@ -20,8 +20,6 @@ import com.android.test.domain.Venue;
 import com.android.test.session.SessionManager;
 import com.android.test.utils.DataHelper;
 import com.melnykov.fab.FloatingActionButton;
-import android.location.Location;
-import android.widget.Toast;
 
 import javax.inject.Inject;
 

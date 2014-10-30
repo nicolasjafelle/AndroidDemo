@@ -2,24 +2,16 @@ package com.android.test.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.NavUtils;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 
 import com.android.test.R;
 import com.android.test.domain.Venue;
-import com.android.test.fragment.DetailFragment;
 import com.android.test.fragment.ResultListFragment;
-import com.android.test.view.VenueItemView;
-import com.bumptech.glide.Glide;
 
 import roboguice.inject.InjectView;
 

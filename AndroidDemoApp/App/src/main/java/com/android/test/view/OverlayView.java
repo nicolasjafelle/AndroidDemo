@@ -4,16 +4,14 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.android.test.R;
 
 /**
  * Created by Nicolas Jafelle on 10/27/14.
  */
+@Deprecated
 public class OverlayView extends View {
 
     public OverlayView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {

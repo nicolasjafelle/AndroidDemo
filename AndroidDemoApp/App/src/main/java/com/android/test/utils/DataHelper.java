@@ -3,7 +3,6 @@ package com.android.test.utils;
 import com.android.test.domain.Venue;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

@@ -4,24 +4,18 @@ import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.test.R;
-import com.android.test.adapter.VenueAdapter;
 import com.android.test.client.FoursquareClient;
 import com.android.test.dialog.DialogFragmentHelper;
 import com.android.test.dialog.ProgressDialogFragment;
-import com.android.test.dialog.VenueDialogFragment;
 import com.android.test.domain.Venue;
 import com.android.test.dto.ErrorType;
 import com.android.test.dto.FoursquareApiErrorDto;
@@ -36,7 +30,6 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectView;
 
 /**
