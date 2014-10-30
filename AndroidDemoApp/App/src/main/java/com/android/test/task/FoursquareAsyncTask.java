@@ -15,6 +15,9 @@ import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 
 import retrofit.RetrofitError;
+import roboguice.activity.event.OnPauseEvent;
+import roboguice.context.event.OnDestroyEvent;
+import roboguice.event.Observes;
 import roboguice.util.RoboAsyncTask;
 
 /**
@@ -50,7 +53,7 @@ public abstract class FoursquareAsyncTask<T> extends RoboAsyncTask<T> {
 						FoursquareApiErrorDto errorDto = new Gson().fromJson(reader, FoursquareApiErrorDto.class);
 						onApiError(errorDto);
 					}
-				}else if(retrofitError.isNetworkError()){
+				}else if(retrofitError.isNetworkError() && !isCancelled()){
 					Toast.makeText(getContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
 				}
 			}else {
@@ -68,8 +71,9 @@ public abstract class FoursquareAsyncTask<T> extends RoboAsyncTask<T> {
 
 	protected abstract void onApiError(FoursquareApiErrorDto errorDto);
 
-	public final Context getContext() {
-		return this.context;
-	}
+    protected void onActivityDestroy(@Observes OnDestroyEvent ignored ) {
+        Log.d("BACKGROUND_TASK", "On activity destroy background task " + this);
+        cancel(true);
+    }
 
 }

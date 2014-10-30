@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.Random;
 
+import roboguice.RoboGuice;
 import roboguice.inject.InjectView;
 
 /**
@@ -60,11 +61,7 @@ public class VenueItemView extends RelativeLayout {
         // nextInt is normally exclusive of the top value,
         // so add 1 to make it inclusive
         int randomNum = rand.nextInt((10 - 1) + 1) + 1;
-        Log.i("RANDOMNUMBER", "Random number = " + randomNum);
-
         RANDOM_IMAGE_URL = RANDOM_IMAGE_URL + randomNum;
-
-
 	}
 
 	public void fillData(Venue venue, Location currentLocation) {

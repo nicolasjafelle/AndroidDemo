@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import roboguice.RoboGuice;
+import roboguice.activity.RoboActionBarActivity;
 
 public abstract class AbstractActionBarActivity extends RoboActionBarActivity {
 

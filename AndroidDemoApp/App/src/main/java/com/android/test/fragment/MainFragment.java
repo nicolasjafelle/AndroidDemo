@@ -2,7 +2,8 @@ package com.android.test.fragment;
 
 import android.content.Context;
 import android.location.Location;
-import android.os.Bundle;
+import android.os.*;
+import android.os.Process;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,12 +32,16 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import roboguice.inject.InjectView;
+import roboguice.util.RoboAsyncTask;
 
 /**
  * MainFragment
  * Created by nicolas on 12/22/13.
  */
-public class MainFragment extends AbstractFragment<MainFragment.Callback> implements SideBarCallback {
+public class MainFragment extends AbstractFragment<MainFragment.Callback>
+        implements SideBarCallback, ProgressDialogFragment.ProgressDialogFragmentListener {
+
+
 
     public interface Callback {
         void onResult(List<Venue> venues, Location currentLocation, String place);
@@ -48,6 +53,8 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback> implem
 
     @InjectView(R.id.fragment_main_button)
 	private Button searchButton;
+
+    private RoboAsyncTask asyncTask;
 
     @Inject
     private SessionManager sessionManager;
@@ -84,6 +91,7 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback> implem
 
     private void createProgressDialog(int resId) {
 		Bundle arguments = new Bundle();
+        progressDialog.setProgressDialogFragmentListener(this);
 		arguments.putString(ProgressDialogFragment.MESSAGE, getString(resId));
 		DialogFragmentHelper.show(getActivity(), progressDialog, arguments);
 	}
@@ -98,7 +106,8 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback> implem
 			}else {
 				// check if GPS enabled
 				if(gpsTracker.canGetLocation()){
-					new VenueTask(getActivity(), place, gpsTracker.getLocation()).execute();
+                    asyncTask = new VenueTask(getActivity(), place, gpsTracker.getLocation());
+                    asyncTask.execute();
 				}else{
 					gpsTracker.showSettingsAlert();
 				}
@@ -109,7 +118,8 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback> implem
     @Override
     public void onSideBarItemClick(String text) {
         if(gpsTracker.canGetLocation()){
-            new VenueTask(getActivity(), text, gpsTracker.getLocation()).execute();
+            asyncTask = new VenueTask(getActivity(), text, gpsTracker.getLocation());
+            asyncTask.execute();
         }else{
             gpsTracker.showSettingsAlert();
         }
@@ -129,8 +139,16 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback> implem
 		gpsTracker.stopUsingGPS();
 	}
 
+    @Override
+    public void onCancel() {
+        cancelTask();
+    }
 
-
+    private void cancelTask() {
+        if(asyncTask != null && !asyncTask.isCancelled()) {
+            asyncTask.cancel(true);
+        }
+    }
 
 	/**
 	 * VenueTask
@@ -149,6 +167,7 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback> implem
 		@Override
 		protected void onPreExecute() throws Exception {
 			super.onPreExecute();
+            android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
 			createProgressDialog(R.string.connecting_to_foursquare);
 		}
 
@@ -160,13 +179,15 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback> implem
 		@Override
 		protected void onSuccess(VenueDto venueDto) throws Exception {
 			super.onSuccess(venueDto);
-			List<Venue> venues = venueDto.getResponse().getVenues();
 
-			if(venues == null && venues.size() > 0) {
-				Toast.makeText(getContext(), R.string.no_results_found, Toast.LENGTH_SHORT).show();
-			}else {
-                callbacks.onResult(venues, currentLocation, criteria);
-			}
+            if(!isCancelled()) {
+                List<Venue> venues = venueDto.getResponse().getVenues();
+                if(venues == null || venues.size() == 0) {
+                    Toast.makeText(getContext(), R.string.no_results_found, Toast.LENGTH_SHORT).show();
+                }else {
+                    callbacks.onResult(venues, currentLocation, criteria);
+                }
+            }
 		}
 
 		@Override
@@ -187,8 +208,9 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback> implem
 		@Override
 		protected void onFinally() throws RuntimeException {
 			super.onFinally();
-			closeKeyboard();
-			progressDialog.dismiss();
+            closeKeyboard();
+            progressDialog.dismissAllowingStateLoss();
+
 		}
 	}
 
