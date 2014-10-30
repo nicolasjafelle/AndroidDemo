@@ -7,11 +7,5 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/material_toolbar"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:minHeight="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:layout_alignParentTop="true"/>
+    <include layout="@layout/toolbar"/>
 </RelativeLayout>
