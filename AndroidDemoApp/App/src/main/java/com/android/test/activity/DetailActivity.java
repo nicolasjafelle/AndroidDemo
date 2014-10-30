@@ -1,6 +1,7 @@
 package com.android.test.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -26,10 +27,11 @@ public class DetailActivity extends AbstractActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
+
+
 
     @Nullable
     @Override
@@ -48,9 +50,16 @@ public class DetailActivity extends AbstractActionBarActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 NavUtils.navigateUpTo(this, new Intent(this, ResultListActivity.class));
+                animate();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        animate();
     }
 
     public static void startActivity(AbstractActionBarActivity activity, View transitionView, String url) {
@@ -63,7 +72,24 @@ public class DetailActivity extends AbstractActionBarActivity {
         intent.putExtra(DetailFragment.ANIMATED_IMAGE, url);
         intent.putExtra(DetailFragment.ANIMATED_NAME, ((VenueItemView)transitionView).getNameText() );
         intent.putExtra(DetailFragment.ANIMATED_DISTANCE, ((VenueItemView)transitionView).getDistanceText() );
+
         ActivityCompat.startActivity(activity, intent, options.toBundle());
+        animate(activity);
     }
+
+    private static void animate(AbstractActionBarActivity activity) {
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            activity.overridePendingTransition(R.anim.bottom_in, R.anim.top_out);
+        }
+
+    }
+
+    private void animate() {
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            overridePendingTransition(R.anim.top_in, R.anim.bottom_out);
+        }
+
+    }
+
 
 }
