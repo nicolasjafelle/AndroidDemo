@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.android.test.R;
 import com.android.test.domain.Venue;
 import com.android.test.utils.ViewUtil;
-import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 
 import java.util.Random;
 
@@ -68,9 +68,8 @@ public class VenueItemView extends RelativeLayout {
         setTag(RANDOM_IMAGE_URL);
 		nameView.setText(venue.getName());
 
-        Glide.with(getContext())
+        Picasso.with(getContext())
                 .load(RANDOM_IMAGE_URL)
-                .crossFade()
                 .into(randomImage);
 
 		if(currentLocation != null) {

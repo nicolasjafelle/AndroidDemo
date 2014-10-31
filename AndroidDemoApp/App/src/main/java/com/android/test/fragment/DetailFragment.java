@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.test.R;
-import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 
 import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectView;
@@ -62,9 +62,8 @@ public class DetailFragment extends AbstractFragment<DetailFragment.Callback> {
         ViewCompat.setTransitionName(nameView, ANIMATED_NAME);
         ViewCompat.setTransitionName(distanceView, ANIMATED_DISTANCE);
 
-        Glide.with(getActivity())
+        Picasso.with(getActivity())
                 .load(url)
-                .crossFade()
                 .into(imageView);
 
         nameView.setText(name);
