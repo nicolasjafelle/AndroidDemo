@@ -28,10 +28,11 @@ Instructions
 System Requirements 
 ============
 
-1. Android Studio 0.8.14
+1. Android Studio 0.9.0
 2. Gradle 2.1+
-3. Minimun Android SDK 14
-4. Target Android SDK 21
+3. Android Gradle plugin version 0.14.0
+4. Minimun Android SDK 14
+5. Target Android SDK 21
 
 
 Developed By
