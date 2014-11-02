@@ -21,12 +21,20 @@ android {
 
     buildTypes {
         release {
-            zipAlign true
+            zipAlignEnabled true
             debuggable false
             signingConfig signingConfigs.release
-            runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
+            minifyEnabled true
+            shrinkResources true
         }
+
+        // Uncomment to see the results of using Proguard. NOTE: proguard is not needed while develop the app.
+//        debug {
+//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
+//            minifyEnabled true
+//            shrinkResources true
+//        }
     }
 
 }
@@ -37,8 +45,8 @@ dependencies {
 
 
     compile 'com.melnykov:floatingactionbutton:1.0.5'
-    compile 'com.android.support:appcompat-v7:21.0.0'
-    compile 'com.android.support:recyclerview-v7:21.0.0'
+    compile 'com.android.support:appcompat-v7:21.0.+'
+    compile 'com.android.support:recyclerview-v7:21.0.+'
 
     compile 'com.squareup.picasso:picasso:2.3.4'
     compile 'com.squareup.retrofit:retrofit:1.6.1'
