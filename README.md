@@ -5,13 +5,14 @@ Demo app to show how to start an Android App. This demo shows:
 
 1. How to create a Fragment and associate to an Activity.
 2. Make Asynchronous call using RoboAsyncTask.
-3. Make Roboguice compatible with ActionBarActivity
+3. Use Latest Roboguice 3.0
 4. Connect to Foursquare's API using Retrofit with OkHttp and parse Json with Gson.
 5. Material Design with latest AppCompat library (version 21) and animations like Google+.
 6. Side Bar implementation.
 7. RecyclerView implementation with onClickListener, View Types and OnScrollListener
 8. Use of GPS.
 9. Persists data.
+10. Use of Proguard to reduce apk size.
 
 It also handle HTTP errors in a generic way (see FoursquareAsyncTask.java) and use GPSTracker to handle Geo locations.
 
