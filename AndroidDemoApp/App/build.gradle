@@ -1,5 +1,9 @@
 apply plugin: 'com.android.application'
 
+// Load custom properties file signing.properties
+Properties props = new Properties()
+props.load(new FileInputStream(file(project.property('signing.properties'))))
+
 repositories {
     mavenCentral()
 }
@@ -11,12 +15,24 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 1
-        versionName '1.0'
+        versionCode Integer.parseInt(project.VERSION_CODE)
+        versionName project.VERSION_NAME
     }
 
     signingConfigs {
-        release
+        release {
+//            If you want to use another file like signing.properties...
+            storeFile file(props['STORE_FILE'])
+            storePassword props['STORE_PASSWORD']
+            keyAlias props['KEY_ALIAS']
+            keyPassword props['KEY_PASSWORD']
+
+//            If you want to use the default gradle.properties use directly...
+//            storeFile file(project.STORE_FILE)
+//            storePassword project.STORE_PASSWORD
+//            keyAlias project.KEY_ALIAS
+//            keyPassword project.KEY_PASSWORD
+        }
     }
 
     buildTypes {
@@ -58,4 +74,18 @@ dependencies {
 
 project.dependencies {
     provided 'org.roboguice:roboblender:3.+'
+}
+
+android.applicationVariants.all { variant ->
+    def apk = variant.outputFile
+
+    def newName
+    if (variant.buildType.debuggable ) {
+        newName = 'Android Demo v' + project.VERSION_NAME + '_DEBUG' +'.apk';
+    } else {
+        newName = 'Android Demo v' + project.VERSION_NAME + '_RELEASE' + '.apk';
+    }
+
+    //noinspection GroovyAssignabilityCheck
+    variant.outputFile = new File(apk.parentFile, newName)
 }
