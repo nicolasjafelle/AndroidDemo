@@ -13,6 +13,7 @@ Demo app to show how to start an Android App. This demo shows:
 8. Use of GPS.
 9. Persists data.
 10. Use of Proguard to reduce apk size.
+11. Two ways to handle release keystore and it values to create a Release APK (ready for Google Play).
 
 It also handle HTTP errors in a generic way (see FoursquareAsyncTask.java) and use GPSTracker to handle Geo locations.
 
