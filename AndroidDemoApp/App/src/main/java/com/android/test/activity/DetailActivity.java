@@ -1,6 +1,8 @@
 package com.android.test.activity;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,14 +16,17 @@ import android.view.View;
 
 import com.android.test.R;
 import com.android.test.fragment.DetailFragment;
+import com.android.test.view.ObservableScrollView;
 import com.android.test.view.VenueItemView;
 
 import roboguice.inject.InjectView;
 
-public class DetailActivity extends AbstractActionBarActivity {
+public class DetailActivity extends AbstractActionBarActivity implements DetailFragment.Callback {
 
     @InjectView(R.id.material_toolbar)
     private Toolbar toolbar;
+
+    private Drawable mActionBarBackgroundDrawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +34,51 @@ public class DetailActivity extends AbstractActionBarActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mActionBarBackgroundDrawable = getResources().getDrawable(R.color.md_green_500);
+        mActionBarBackgroundDrawable.setAlpha(0);
+
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN) {
+            mActionBarBackgroundDrawable.setCallback(mDrawableCallback);
+        }
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            toolbar.setBackgroundDrawable(mActionBarBackgroundDrawable);
+        }else {
+            toolbar.setBackground(mActionBarBackgroundDrawable);
+        }
+
+
+
+    }
+
+
+    private Drawable.Callback mDrawableCallback = new Drawable.Callback() {
+        @Override
+        public void invalidateDrawable(Drawable who) {
+            toolbar.setBackgroundDrawable(who);
+        }
+
+        @Override
+        public void scheduleDrawable(Drawable who, Runnable what, long when) {
+        }
+
+        @Override
+        public void unscheduleDrawable(Drawable who, Runnable what) {
+        }
+    };
+
+    @Override
+    public void onSetupFadingActionBar(ObservableScrollView observableScrollView, final View header) {
+        observableScrollView.setObservableScrollViewListener(new ObservableScrollView.ObservableScrollViewListener() {
+            @Override
+            public void onScrollChanged(int l, int t, int oldl, int oldt) {
+                final int headerHeight = header.getHeight() - toolbar.getHeight();
+                final float ratio = (float) Math.min(Math.max(t, 0), headerHeight) / headerHeight;
+                final int newAlpha = (int) (ratio * 255);
+                mActionBarBackgroundDrawable.setAlpha(newAlpha);
+            }
+        });
     }
 
 
@@ -41,7 +91,7 @@ public class DetailActivity extends AbstractActionBarActivity {
 
     @Override
     protected void setInitialFragment() {
-        setInitialFragment(R.layout.activity_main, R.id.container, DetailFragment.newInstance());
+        setInitialFragment(R.layout.activity_main_overlay, R.id.container, DetailFragment.newInstance());
     }
 
     @Override
@@ -90,6 +140,7 @@ public class DetailActivity extends AbstractActionBarActivity {
         }
 
     }
+
 
 
 }
