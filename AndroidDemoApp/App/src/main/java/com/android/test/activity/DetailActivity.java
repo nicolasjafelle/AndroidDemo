@@ -1,6 +1,5 @@
 package com.android.test.activity;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -73,7 +72,7 @@ public class DetailActivity extends AbstractActionBarActivity implements DetailF
         observableScrollView.setObservableScrollViewListener(new ObservableScrollView.ObservableScrollViewListener() {
             @Override
             public void onScrollChanged(int l, int t, int oldl, int oldt) {
-                final int headerHeight = header.getHeight() - toolbar.getHeight();
+                final int headerHeight = (header.getHeight() - toolbar.getHeight());
                 final float ratio = (float) Math.min(Math.max(t, 0), headerHeight) / headerHeight;
                 final int newAlpha = (int) (ratio * 255);
                 mActionBarBackgroundDrawable.setAlpha(newAlpha);

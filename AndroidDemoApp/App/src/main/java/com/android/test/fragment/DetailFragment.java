@@ -24,7 +24,6 @@ public class DetailFragment extends AbstractFragment<DetailFragment.Callback> {
     public static final String ANIMATED_DISTANCE = "distance";
 
     public interface Callback {
-        //TODO
         void onSetupFadingActionBar(ObservableScrollView observableScrollView, final View header);
     }
 
