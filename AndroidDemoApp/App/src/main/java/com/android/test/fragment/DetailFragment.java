@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.test.R;
+import com.android.test.view.ObservableScrollView;
 import com.squareup.picasso.Picasso;
 
 import roboguice.inject.InjectExtra;
@@ -23,8 +24,11 @@ public class DetailFragment extends AbstractFragment<DetailFragment.Callback> {
     public static final String ANIMATED_DISTANCE = "distance";
 
     public interface Callback {
-        //TODO
+        void onSetupFadingActionBar(ObservableScrollView observableScrollView, final View header);
     }
+
+    @InjectView(R.id.fragment_detail_observable_scroll_view)
+    private ObservableScrollView scrollview;
 
     @InjectView(R.id.fragment_detail_image_view)
     private ImageView imageView;
@@ -58,6 +62,8 @@ public class DetailFragment extends AbstractFragment<DetailFragment.Callback> {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
+        callbacks.onSetupFadingActionBar(scrollview, imageView);
+
         ViewCompat.setTransitionName(imageView, ANIMATED_IMAGE);
         ViewCompat.setTransitionName(nameView, ANIMATED_NAME);
         ViewCompat.setTransitionName(distanceView, ANIMATED_DISTANCE);
@@ -70,15 +76,6 @@ public class DetailFragment extends AbstractFragment<DetailFragment.Callback> {
         distanceView.setText(distance);
 
 	}
-
-
-
-
-
-
-
-
-
 
 
 }
