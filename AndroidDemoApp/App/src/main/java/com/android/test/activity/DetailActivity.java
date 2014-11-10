@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -47,10 +48,7 @@ public class DetailActivity extends AbstractActionBarActivity implements DetailF
             toolbar.setBackground(mActionBarBackgroundDrawable);
         }
 
-
-
     }
-
 
     private Drawable.Callback mDrawableCallback = new Drawable.Callback() {
         @Override

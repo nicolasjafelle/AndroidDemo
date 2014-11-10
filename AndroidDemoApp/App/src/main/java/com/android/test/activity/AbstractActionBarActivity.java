@@ -42,7 +42,6 @@ public abstract class AbstractActionBarActivity extends RoboActionBarActivity {
 	 */
 	protected void setInitialFragment(int layoutResId, int viewId, Fragment fragment) {
 		setContentView(layoutResId);
-        RoboGuice.getInjector(this).injectViewMembers(this);
 		mainLayout = (FrameLayout) findViewById(viewId);
 		setInitialFragment(mainLayout, fragment);
 	}
@@ -68,7 +67,7 @@ public abstract class AbstractActionBarActivity extends RoboActionBarActivity {
 	private void setInitialFragment(View view, Fragment fragment) {
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-		fragmentTransaction.add(view.getId(), fragment).commit();
+		fragmentTransaction.replace(view.getId(), fragment).commit();
 	}
 
 	/**

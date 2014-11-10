@@ -14,7 +14,7 @@ public abstract class AbstractFragment<T> extends RoboFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        setRetainInstance(true);
+//        setRetainInstance(true);
     }
 
     @Override

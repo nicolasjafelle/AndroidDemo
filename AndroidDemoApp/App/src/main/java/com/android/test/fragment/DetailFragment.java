@@ -1,6 +1,7 @@
 package com.android.test.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.view.LayoutInflater;
@@ -76,6 +77,5 @@ public class DetailFragment extends AbstractFragment<DetailFragment.Callback> {
         distanceView.setText(distance);
 
 	}
-
 
 }
