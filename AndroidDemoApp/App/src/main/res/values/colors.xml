@@ -19,20 +19,20 @@
     <color name="black_translucent">#80000000</color>
     <color name="gray">#464646</color>
 
-    <color name="md_green_50">#d0f8ce</color>
-    <color name="md_green_100">#a3e9a4</color>
-    <color name="md_green_200">#72d572</color>
-    <color name="md_green_300">#42bd41</color>
-    <color name="md_green_400">#2baf2b</color>
-    <color name="md_green_500">#259b24</color>
-    <color name="md_green_600">#0a8f08</color>
-    <color name="md_green_700">#0a7e07</color>
-    <color name="md_green_800">#056f00</color>
-    <color name="md_green_900">#0d5302</color>
-    <color name="md_green_A100">#a2f78d</color>
-    <color name="md_green_A200">#5af158</color>
-    <color name="md_green_A400">#14e715</color>
-    <color name="md_green_A700">#12c700</color>
+    <color name="md_green_50">#E8F5E9</color>
+    <color name="md_green_100">#C8E6C9</color>
+    <color name="md_green_200">#A5D6A7</color>
+    <color name="md_green_300">#81C784</color>
+    <color name="md_green_400">#66BB6A</color>
+    <color name="md_green_500">#4CAF50</color>
+    <color name="md_green_600">#43A047</color>
+    <color name="md_green_700">#388E3C</color>
+    <color name="md_green_800">#2E7D32</color>
+    <color name="md_green_900">#1B5E20</color>
+    <color name="md_green_A100">#B9F6CA</color>
+    <color name="md_green_A200">#69F0AE</color>
+    <color name="md_green_A400">#00E676</color>
+    <color name="md_green_A700">#00C853</color>
 
-    <color name="alpha_md_green_400">#802baf2b</color>
+    <color name="alpha_md_green_400">#8066BB6A</color>
 </resources>
