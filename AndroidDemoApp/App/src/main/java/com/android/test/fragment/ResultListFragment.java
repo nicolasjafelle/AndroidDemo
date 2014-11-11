@@ -9,13 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.android.test.R;
 import com.android.test.adapter.VenueRecyclerAdapter;
-import com.android.test.dialog.DialogFragmentHelper;
-import com.android.test.dialog.VenueDialogFragment;
 import com.android.test.domain.Venue;
 import com.android.test.session.SessionManager;
 import com.android.test.utils.DataHelper;
@@ -28,7 +25,7 @@ import roboguice.inject.InjectView;
 
 
 public class ResultListFragment extends AbstractFragment<ResultListFragment.Callback>
-        implements AdapterView.OnItemClickListener, VenueRecyclerAdapter.RecyclerViewListener {
+        implements VenueRecyclerAdapter.RecyclerViewListener {
 
     public static final String DATA_HELPER = "data_helper";
     public static final String PLACE = "place";
@@ -61,7 +58,6 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
     @Inject
     private SessionManager sessionManager;
 
-	private VenueDialogFragment venueDialogFragment;
 
     private VenueRecyclerAdapter adapter;
 
@@ -78,11 +74,9 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-        venueDialogFragment = VenueDialogFragment.newInstance();
 
         setupRecyclerView();
         setupFab();
-
 	}
 
     private void setupFab() {
@@ -145,26 +139,5 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
 
         callbacks.onItemClick(venue, view, url);
     }
-
-
-
-    @Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		Venue venue = (Venue)parent.getItemAtPosition(position);
-		createVenueDialog(venue);
-	}
-
-    private void createVenueDialog(Venue venue) {
-		Bundle arguments = new Bundle();
-		arguments.putSerializable(VenueDialogFragment.SELECTED_VENUE, venue);
-		DialogFragmentHelper.show(getActivity(), venueDialogFragment, arguments);
-	}
-
-
-
-
-
-
-
 
 }

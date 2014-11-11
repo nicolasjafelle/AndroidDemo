@@ -4,6 +4,7 @@ import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Process;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +43,7 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
         implements SideBarCallback, ProgressDialogFragment.ProgressDialogFragmentListener {
 
 
+    private final String DIALOG_SHOWING = "dialog_showing";
 
     public interface Callback {
         void onResult(List<Venue> venues, Location currentLocation, String place);
@@ -64,7 +66,13 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
 
 	private GPSTracker gpsTracker;
 
-	public static Fragment newInstance() {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
+    public static Fragment newInstance() {
 		return new MainFragment();
 	}
 
@@ -140,6 +148,25 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
 	}
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putBoolean(DIALOG_SHOWING, progressDialog.isShowing());
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        if(savedInstanceState != null) {
+            boolean isShowing = savedInstanceState.getBoolean(DIALOG_SHOWING);
+            if(isShowing) {
+                createProgressDialog(R.string.connecting_to_foursquare);
+            }
+        }
+    }
+
+    @Override
     public void onCancel() {
         cancelTask();
     }
@@ -167,12 +194,12 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
 		@Override
 		protected void onPreExecute() throws Exception {
 			super.onPreExecute();
-            android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
 			createProgressDialog(R.string.connecting_to_foursquare);
 		}
 
 		@Override
 		public VenueDto call() throws Exception {
+            android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
 			return FoursquareClient.getInstance().searchForVenues(this.criteria);
 		}
 

@@ -7,12 +7,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import roboguice.RoboGuice;
 import roboguice.activity.RoboActionBarActivity;
 
 public abstract class AbstractActionBarActivity extends RoboActionBarActivity {
 
 	private FrameLayout mainLayout;
+    private final String initialFragment = "initial_fragment";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +65,11 @@ public abstract class AbstractActionBarActivity extends RoboActionBarActivity {
 	 * @param fragment - the initial fragment
 	 */
 	private void setInitialFragment(View view, Fragment fragment) {
-		FragmentManager fragmentManager = getSupportFragmentManager();
-		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-		fragmentTransaction.replace(view.getId(), fragment).commit();
+        if(getCurrentFragment() == null) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(view.getId(), fragment, initialFragment).commit();
+        }
 	}
 
 	/**
@@ -96,5 +98,13 @@ public abstract class AbstractActionBarActivity extends RoboActionBarActivity {
 		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
 	    fragmentTransaction.replace(mainLayout.getId(), newFragment).commit();
 	}
+
+    /**
+     * Returns the current showing fragment or null if no fragment is added.
+     * @return the fragment previously added or null
+     */
+    protected Fragment getCurrentFragment() {
+        return getSupportFragmentManager().findFragmentById(mainLayout.getId());
+    }
 
 }

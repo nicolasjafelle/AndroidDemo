@@ -35,4 +35,15 @@ public abstract class DialogFragmentHelper extends DialogFragment {
 		fragment.show(manager, TAG);
 	}
 
+    /**
+     * Dismiss current DialogFragment
+     * @param activity
+     */
+    public static void dismissDialog(FragmentActivity activity){
+        Fragment prev = activity.getSupportFragmentManager().findFragmentByTag(TAG);
+        if (prev != null) {
+            DialogFragment df = (DialogFragment) prev;
+            df.dismissAllowingStateLoss();
+        }
+    }
 }

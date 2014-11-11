@@ -15,8 +15,6 @@ import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 
 import retrofit.RetrofitError;
-import roboguice.context.event.OnDestroyEvent;
-import roboguice.event.Observes;
 import roboguice.util.RoboAsyncTask;
 
 /**
@@ -70,9 +68,9 @@ public abstract class FoursquareAsyncTask<T> extends RoboAsyncTask<T> {
 
 	protected abstract void onApiError(FoursquareApiErrorDto errorDto);
 
-    protected void onActivityDestroy(@Observes OnDestroyEvent ignored ) {
-        Log.d("BACKGROUND_TASK", "On activity destroy background task " + this);
-        cancel(true);
-    }
+//    protected void onActivityDestroy(@Observes OnDestroyEvent ignored ) {
+//        Log.d("BACKGROUND_TASK", "On activity destroy background task " + this);
+//        cancel(true);
+//    }
 
 }
