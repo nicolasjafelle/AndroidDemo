@@ -23,9 +23,13 @@ import com.android.test.dto.ErrorType;
 import com.android.test.dto.FoursquareApiErrorDto;
 import com.android.test.dto.VenueDto;
 import com.android.test.location.GPSTracker;
+import com.android.test.otto.BusProvider;
+import com.android.test.otto.VenueResultEvent;
+import com.android.test.otto.VenueSearchEvent;
 import com.android.test.session.SessionManager;
 import com.android.test.task.FoursquareAsyncTask;
 import com.android.test.view.SideBarCallback;
+import com.squareup.otto.Subscribe;
 
 import java.util.List;
 import java.util.Set;
@@ -65,6 +69,9 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
     private FoursquareClient foursquareClient;
 
     @Inject
+    private BusProvider busProvider;
+
+    @Inject
 	private ProgressDialogFragment progressDialog;
 
 
@@ -73,7 +80,6 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
     }
 
     public static Fragment newInstance() {
@@ -118,8 +124,7 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
 			}else {
 				// check if GPS enabled
 				if(gpsTracker.canGetLocation()){
-                    asyncTask = new VenueTask(getActivity(), place, gpsTracker.getLocation());
-                    asyncTask.execute();
+                    postVenueSearchEvent(place);
 				}else{
 					gpsTracker.showSettingsAlert();
 				}
@@ -127,14 +132,28 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
 		}
 	};
 
+    @Subscribe
+    public void searchForVenues(VenueSearchEvent event) {
+        asyncTask = new VenueTask(getActivity(), event.place, gpsTracker.getLocation());
+        asyncTask.execute();
+    }
+
+    @Subscribe
+    public void resultVenues(VenueResultEvent event) {
+        callbacks.onResult(event.venues, event.location, event.place);
+    }
+
     @Override
     public void onSideBarItemClick(String text) {
         if(gpsTracker.canGetLocation()){
-            asyncTask = new VenueTask(getActivity(), text, gpsTracker.getLocation());
-            asyncTask.execute();
+            postVenueSearchEvent(text);
         }else{
             gpsTracker.showSettingsAlert();
         }
+    }
+
+    private void postVenueSearchEvent(String text) {
+        busProvider.post(new VenueSearchEvent(text));
     }
 
     private void loadSavedPlaces() {
@@ -146,29 +165,44 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        busProvider.register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onPause();
+        busProvider.unregister(this);
+    }
+
+    @Override
 	public void onDestroy() {
 		super.onDestroy();
 		gpsTracker.stopUsingGPS();
 	}
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putBoolean(DIALOG_SHOWING, progressDialog.isShowing());
-    }
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-
-        if(savedInstanceState != null) {
-            boolean isShowing = savedInstanceState.getBoolean(DIALOG_SHOWING);
-            if(isShowing) {
-                createProgressDialog(R.string.connecting_to_foursquare);
-            }
-        }
-    }
+    /*
+        Wit Otto there is no need to do this.
+    */
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//
+//        outState.putBoolean(DIALOG_SHOWING, progressDialog.isShowing());
+//    }
+//
+//    @Override
+//    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+//        super.onViewStateRestored(savedInstanceState);
+//
+//        if(savedInstanceState != null) {
+//            boolean isShowing = savedInstanceState.getBoolean(DIALOG_SHOWING);
+//            if(isShowing) {
+//                createProgressDialog(R.string.connecting_to_foursquare);
+//            }
+//        }
+//    }
 
     @Override
     public void onCancel() {
@@ -204,6 +238,7 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
 		@Override
 		public VenueDto call() throws Exception {
             android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
+            Thread.sleep(5000);
 			return foursquareClient.searchForVenues(this.criteria);
 		}
 
@@ -216,7 +251,7 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
                 if(venues == null || venues.size() == 0) {
                     Toast.makeText(getContext(), R.string.no_results_found, Toast.LENGTH_SHORT).show();
                 }else {
-                    callbacks.onResult(venues, currentLocation, criteria);
+                    busProvider.post(new VenueResultEvent(venues, criteria, currentLocation));
                 }
             }
 		}
