@@ -61,6 +61,10 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
     @Inject
     private SessionManager sessionManager;
 
+    @Inject
+    private FoursquareClient foursquareClient;
+
+    @Inject
 	private ProgressDialogFragment progressDialog;
 
 
@@ -141,7 +145,7 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
         }
     }
 
-	@Override
+    @Override
 	public void onDestroy() {
 		super.onDestroy();
 		gpsTracker.stopUsingGPS();
@@ -200,7 +204,7 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
 		@Override
 		public VenueDto call() throws Exception {
             android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
-			return FoursquareClient.getInstance().searchForVenues(this.criteria);
+			return foursquareClient.searchForVenues(this.criteria);
 		}
 
 		@Override

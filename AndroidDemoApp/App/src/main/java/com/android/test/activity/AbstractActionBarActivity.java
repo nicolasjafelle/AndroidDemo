@@ -12,7 +12,6 @@ import roboguice.activity.RoboActionBarActivity;
 public abstract class AbstractActionBarActivity extends RoboActionBarActivity {
 
 	private FrameLayout mainLayout;
-    private final String initialFragment = "initial_fragment";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +67,7 @@ public abstract class AbstractActionBarActivity extends RoboActionBarActivity {
         if(getCurrentFragment() == null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(view.getId(), fragment, initialFragment).commit();
+            fragmentTransaction.replace(view.getId(), fragment).commit();
         }
 	}
 

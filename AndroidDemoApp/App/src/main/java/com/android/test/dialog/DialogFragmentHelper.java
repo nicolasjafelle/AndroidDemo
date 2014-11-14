@@ -1,5 +1,6 @@
 package com.android.test.dialog;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -46,4 +47,17 @@ public abstract class DialogFragmentHelper extends DialogFragment {
             df.dismissAllowingStateLoss();
         }
     }
+
+    /**
+     * Dismiss current DialogFragment
+     * @param context
+     */
+    public static void dismissDialog(Context context){
+        Fragment prev = ((FragmentActivity)context).getSupportFragmentManager().findFragmentByTag(TAG);
+        if (prev != null) {
+            DialogFragment df = (DialogFragment) prev;
+            df.dismissAllowingStateLoss();
+        }
+    }
+
 }

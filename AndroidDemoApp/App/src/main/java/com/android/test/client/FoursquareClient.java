@@ -1,6 +1,7 @@
 package com.android.test.client;
 
 import com.android.test.dto.VenueDto;
+import com.google.inject.Singleton;
 
 import retrofit.RestAdapter;
 
@@ -11,6 +12,7 @@ import retrofit.RestAdapter;
  * "RestAdapter and the created instances should be treated as singletons"
  * @author nicolasjafelle
  */
+@Singleton
 public class FoursquareClient {
 
 	private static final String BASE_URL = "https://api.foursquare.com/v2";
@@ -18,19 +20,7 @@ public class FoursquareClient {
 	private RestAdapter restAdapter;
 	private IFoursquareClient foursquareClient;
 
-	/**
-	 * SingletonHolder is loaded on the first execution of Singleton.getInstance()
-	 * or the first access to SingletonHolder.INSTANCE, not before.
-	 */
-	private static class SingletonHolder {
-		public static final FoursquareClient instance = new FoursquareClient();
-	}
-
-	public static FoursquareClient getInstance() {
-		return SingletonHolder.instance;
-	}
-
-	private FoursquareClient() {
+	public FoursquareClient() {
 		if (restAdapter == null || foursquareClient == null) {
 
 			restAdapter = new RestAdapter.Builder()
