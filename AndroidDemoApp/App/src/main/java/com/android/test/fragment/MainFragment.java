@@ -4,7 +4,6 @@ import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Process;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +22,7 @@ import com.android.test.dto.ErrorType;
 import com.android.test.dto.FoursquareApiErrorDto;
 import com.android.test.dto.VenueDto;
 import com.android.test.location.GPSTracker;
-import com.android.test.otto.BusProvider;
+import com.android.test.otto.OttoBus;
 import com.android.test.otto.VenueResultEvent;
 import com.android.test.otto.VenueSearchEvent;
 import com.android.test.session.SessionManager;
@@ -47,8 +46,6 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
         implements SideBarCallback, ProgressDialogFragment.ProgressDialogFragmentListener {
 
 
-    private final String DIALOG_SHOWING = "dialog_showing";
-
     public interface Callback {
         void onResult(List<Venue> venues, Location currentLocation, String place);
         void loadSavedPlaces(Set<String> savedPlaces, SideBarCallback sideBarCallback);
@@ -69,7 +66,7 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
     private FoursquareClient foursquareClient;
 
     @Inject
-    private BusProvider busProvider;
+    private OttoBus ottoBus;
 
     @Inject
 	private ProgressDialogFragment progressDialog;
@@ -153,7 +150,7 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
     }
 
     private void postVenueSearchEvent(String text) {
-        busProvider.post(new VenueSearchEvent(text));
+        ottoBus.post(new VenueSearchEvent(text));
     }
 
     private void loadSavedPlaces() {
@@ -167,13 +164,13 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
     @Override
     public void onStart() {
         super.onStart();
-        busProvider.register(this);
+        ottoBus.register(this);
     }
 
     @Override
     public void onStop() {
         super.onPause();
-        busProvider.unregister(this);
+        ottoBus.unregister(this);
     }
 
     @Override
@@ -183,7 +180,7 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
 	}
 
     /*
-        Wit Otto there is no need to do this.
+        With Otto there is no need to do this.
     */
 //    @Override
 //    public void onSaveInstanceState(Bundle outState) {
@@ -238,7 +235,6 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
 		@Override
 		public VenueDto call() throws Exception {
             android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
-            Thread.sleep(5000);
 			return foursquareClient.searchForVenues(this.criteria);
 		}
 
@@ -251,7 +247,7 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
                 if(venues == null || venues.size() == 0) {
                     Toast.makeText(getContext(), R.string.no_results_found, Toast.LENGTH_SHORT).show();
                 }else {
-                    busProvider.post(new VenueResultEvent(venues, criteria, currentLocation));
+                    ottoBus.post(new VenueResultEvent(venues, criteria, currentLocation));
                 }
             }
 		}
