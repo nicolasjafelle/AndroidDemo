@@ -63,6 +63,10 @@ public class ProgressDialogFragment extends RoboDialogFragment {
         return isShowing;
     }
 
+    /**
+     * Workaround for an open bug in DialogFragment.
+     * https://code.google.com/p/android/issues/detail?id=17423
+     */
     @Override
     public void onDestroyView() {
         if(getDialog() != null && getRetainInstance()) {
