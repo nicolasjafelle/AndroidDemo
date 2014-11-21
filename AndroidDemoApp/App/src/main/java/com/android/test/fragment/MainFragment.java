@@ -25,9 +25,12 @@ import com.android.test.location.GPSTracker;
 import com.android.test.otto.OttoBus;
 import com.android.test.otto.VenueResultEvent;
 import com.android.test.otto.VenueSearchEvent;
+import com.android.test.qachee.QacheeData;
 import com.android.test.session.SessionManager;
 import com.android.test.task.FoursquareAsyncTask;
 import com.android.test.view.SideBarCallback;
+import com.qachee.ExpirationTime;
+import com.qachee.QacheeManager;
 import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
 
@@ -78,6 +81,8 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        QacheeManager.getInstance().setExpirationTime(ExpirationTime.ONE_MINUTE);
     }
 
     public static Fragment newInstance() {
@@ -132,13 +137,26 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
 
     @Subscribe
     public void searchForVenues(VenueSearchEvent event) {
-        asyncTask = new VenueTask(getActivity(), event.place, gpsTracker.getLocation());
-        asyncTask.execute();
+
+        QacheeData data = (QacheeData) QacheeManager.getInstance().get((long)event.place.hashCode());
+
+        if(data == null) {
+            asyncTask = new VenueTask(getActivity(), event.place, gpsTracker.getLocation());
+            asyncTask.execute();
+        }else {
+            ottoBus.post(new VenueResultEvent(event.place, gpsTracker.getLocation()));
+        }
+
+
+//        asyncTask = new VenueTask(getActivity(), event.place, gpsTracker.getLocation());
+//        asyncTask.execute();
     }
 
     @Subscribe
     public void resultVenues(VenueResultEvent event) {
-        callbacks.onResult(event.venues, event.location, event.place);
+
+        QacheeData data = (QacheeData) QacheeManager.getInstance().get((long)event.place.hashCode());
+        callbacks.onResult(data.venues, event.location, data.search);
     }
 
 
@@ -228,7 +246,8 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
                 if(venues == null || venues.size() == 0) {
                     Toast.makeText(getContext(), R.string.no_results_found, Toast.LENGTH_SHORT).show();
                 }else {
-                    ottoBus.post(new VenueResultEvent(venues, criteria, currentLocation));
+                    QacheeManager.getInstance().add(new QacheeData(criteria, venues));
+                    ottoBus.post(new VenueResultEvent(criteria, currentLocation));
                 }
             }
 		}

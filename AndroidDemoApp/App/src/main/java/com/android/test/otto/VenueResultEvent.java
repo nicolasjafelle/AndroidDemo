@@ -11,15 +11,15 @@ import java.util.List;
  */
 public class VenueResultEvent {
 
-    public List<Venue> venues;
+//    public List<Venue> venues;
 
     public String place;
 
     public Location location;
 
 
-    public VenueResultEvent(List<Venue> venues, String place, Location location) {
-        this.venues = venues;
+    public VenueResultEvent(String place, Location location) {
+//        this.venues = venues;
         this.place = place;
         this.location = location;
     }
