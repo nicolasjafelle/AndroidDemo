@@ -31,7 +31,6 @@ import com.android.test.task.FoursquareAsyncTask;
 import com.android.test.view.SideBarCallback;
 import com.qachee.ExpirationTime;
 import com.qachee.QacheeManager;
-import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
 
 import java.util.List;

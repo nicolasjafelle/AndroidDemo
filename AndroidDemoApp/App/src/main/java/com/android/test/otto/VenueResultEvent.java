@@ -2,10 +2,6 @@ package com.android.test.otto;
 
 import android.location.Location;
 
-import com.android.test.domain.Venue;
-
-import java.util.List;
-
 /**
  * Created by Nicolas Jafelle on 11/13/14.
  */

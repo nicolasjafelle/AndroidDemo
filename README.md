@@ -11,7 +11,7 @@ Demo app to show how to start an Android App. This demo shows:
 6. Side Bar implementation.
 7. RecyclerView implementation with onClickListener, View Types and OnScrollListener
 8. Use of GPS.
-9. Persists data.
+9. Persists data with Qachee.
 10. Use of Square Otto to use an event bus.
 11. Use of Proguard to reduce apk size.
 12. Two ways to handle release keystore and it values to create a Release APK (ready for Google Play).
