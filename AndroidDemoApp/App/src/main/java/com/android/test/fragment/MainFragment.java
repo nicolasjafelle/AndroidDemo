@@ -28,6 +28,7 @@ import com.android.test.otto.VenueSearchEvent;
 import com.android.test.session.SessionManager;
 import com.android.test.task.FoursquareAsyncTask;
 import com.android.test.view.SideBarCallback;
+import com.squareup.otto.Produce;
 import com.squareup.otto.Subscribe;
 
 import java.util.List;
@@ -140,6 +141,7 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
         callbacks.onResult(event.venues, event.location, event.place);
     }
 
+
     @Override
     public void onSideBarItemClick(String text) {
         if(gpsTracker.canGetLocation()){
@@ -179,27 +181,6 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
 		gpsTracker.stopUsingGPS();
 	}
 
-    /*
-        With Otto there is no need to do this.
-    */
-//    @Override
-//    public void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//
-//        outState.putBoolean(DIALOG_SHOWING, progressDialog.isShowing());
-//    }
-//
-//    @Override
-//    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-//        super.onViewStateRestored(savedInstanceState);
-//
-//        if(savedInstanceState != null) {
-//            boolean isShowing = savedInstanceState.getBoolean(DIALOG_SHOWING);
-//            if(isShowing) {
-//                createProgressDialog(R.string.connecting_to_foursquare);
-//            }
-//        }
-//    }
 
     @Override
     public void onCancel() {
