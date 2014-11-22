@@ -9,8 +9,12 @@ repositories {
 }
 
 android {
+    lintOptions {
+        abortOnError false
+    }
+
     compileSdkVersion 21
-    buildToolsVersion "21.1.0"
+    buildToolsVersion "21.1.1"
 
     defaultConfig {
         minSdkVersion 14
@@ -79,15 +83,19 @@ project.dependencies {
 }
 
 android.applicationVariants.all { variant ->
-    def apk = variant.outputFile
 
-    def newName
-    if (variant.buildType.debuggable ) {
-        newName = 'Android Demo v' + project.VERSION_NAME + '_DEBUG' +'.apk';
-    } else {
-        newName = 'Android Demo v' + project.VERSION_NAME + '_RELEASE' + '.apk';
+    variant.outputs.each { output ->
+        def apk = output.outputFile
+
+        def newName
+        if (variant.buildType.debuggable ) {
+            newName = 'Android Demo v' + project.VERSION_NAME + '_DEBUG' +'.apk';
+        } else {
+            newName = 'Android Demo v' + project.VERSION_NAME + '_RELEASE' + '.apk';
+        }
+
+        //noinspection GroovyAssignabilityCheck
+        output.outputFile = new File(apk.parentFile, newName)
     }
 
-    //noinspection GroovyAssignabilityCheck
-    variant.outputFile = new File(apk.parentFile, newName)
 }
