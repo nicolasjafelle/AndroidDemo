@@ -33,6 +33,7 @@
 -renamesourcefileattribute SourceFile
 -keepattributes SourceFile,LineNumberTable,*Annotation*,Signature
 
+
 -keep class roboguice.** { *; }
 -keep class roboblender.** { *; }
 -keep class resources.** { *; }
@@ -63,6 +64,11 @@
 -keep interface com.android.test.** { *; }
 -keep interface com.google.inject.** { *; }
 -keep interface javax.annotation.** { *; }
+
+-keepclassmembers class ** {
+    @com.squareup.otto.Subscribe public *;
+    @com.squareup.otto.Produce public *;
+}
 
 #-keepclasseswithmembers class * { native <methods>; }
 #
