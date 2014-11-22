@@ -19,8 +19,6 @@ public abstract class AbstractActionBarActivity extends RoboActionBarActivity {
 //		if (savedInstanceState == null) {
 			setInitialFragment();
 //		}
-
-//        getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 	}
 
 	/**
