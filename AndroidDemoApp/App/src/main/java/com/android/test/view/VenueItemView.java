@@ -11,12 +11,10 @@ import android.widget.TextView;
 
 import com.android.test.R;
 import com.android.test.domain.Venue;
-import com.android.test.utils.ViewUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.Random;
 
-import roboguice.inject.InjectView;
 
 /**
  * VenueItemView
@@ -26,13 +24,10 @@ public class VenueItemView extends RelativeLayout {
 
     private String RANDOM_IMAGE_URL = "http://lorempixel.com/600/480/abstract/";
 
-    @InjectView(R.id.venue_item_name)
 	private TextView nameView;
 
-    @InjectView(R.id.venue_item_distance)
 	private TextView distanceView;
 
-    @InjectView(R.id.venue_item_abstract_image)
     private ImageView randomImage;
 
 	public VenueItemView(Context context) {
@@ -52,7 +47,10 @@ public class VenueItemView extends RelativeLayout {
 
 	private void init() {
 		inflate(getContext(), R.layout.venue_item, this);
-        ViewUtil.reallyInjectViews(this);
+
+        nameView = (TextView) findViewById(R.id.venue_item_name);
+        distanceView = (TextView) findViewById(R.id.venue_item_distance);
+        randomImage = (ImageView) findViewById(R.id.venue_item_abstract_image);
 
         Random rand = new Random();
 

@@ -34,9 +34,6 @@
 -keepattributes SourceFile,LineNumberTable,*Annotation*,Signature
 
 
--keep class roboguice.** { *; }
--keep class roboblender.** { *; }
--keep class resources.** { *; }
 -keep class retrofit.** { *; }
 -keep class okhttp.** { *; }
 -keep class com.google.gson.** { *; }
@@ -50,9 +47,6 @@
 -keep class javax.annotation.** { *; }
 -keep class * extends com.google.inject.AnnotationDatabase
 
--keep interface roboguice.** { *; }
--keep interface roboblender.** { *; }
--keep interface resources.** { *; }
 -keep interface retrofit.** { *; }
 -keep interface okhttp.** { *; }
 -keep interface com.google.gson.** { *; }
@@ -69,21 +63,4 @@
     @com.squareup.otto.Subscribe public *;
     @com.squareup.otto.Produce public *;
 }
-
-#-keepclasseswithmembers class * { native <methods>; }
-#
-#-keepclassmembers class **.R$* { public static <fields>; }
-#-keepclasseswithmembernames class * { native <methods>; }
-#-keepclassmembers enum * {
-#    public static **[] values();
-#    public static ** valueOf(java.lang.String);
-#}
-#-keepclassmembers class * {
-#	@com.google.inject.Inject <init>(...);
-#	@com.google.inject.Inject <fields>;
-#	@javax.annotation.Nullable <fields>;
-#}
-#-keepclassmembers class * {
-#	void *(roboguice.activity.event.*);
-#}
 

@@ -37,9 +37,6 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import roboguice.inject.InjectView;
-import roboguice.util.RoboAsyncTask;
-
 /**
  * MainFragment
  * Created by nicolas on 12/22/13.
@@ -53,13 +50,11 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
         void loadSavedPlaces(Set<String> savedPlaces, SideBarCallback sideBarCallback);
     }
 
-    @InjectView(R.id.fragment_main_edittext)
 	private EditText editText;
 
-    @InjectView(R.id.fragment_main_button)
 	private Button searchButton;
 
-    private RoboAsyncTask asyncTask;
+    private FoursquareAsyncTask asyncTask;
 
     @Inject
     private SessionManager sessionManager;
@@ -70,7 +65,6 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
     @Inject
     private OttoBus ottoBus;
 
-    @Inject
 	private ProgressDialogFragment progressDialog;
 
 
@@ -87,7 +81,12 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
+
+        editText = (EditText) view.findViewById(R.id.fragment_main_edittext);
+        searchButton = (Button) view.findViewById(R.id.fragment_main_button);
+
+        return view;
 	}
 
 	@Override
@@ -108,6 +107,7 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
 
     private void createProgressDialog(int resId) {
 		Bundle arguments = new Bundle();
+        progressDialog = ProgressDialogFragment.newInstance();
         progressDialog.setProgressDialogFragmentListener(this);
 		arguments.putString(ProgressDialogFragment.MESSAGE, getString(resId));
 		DialogFragmentHelper.show(getActivity(), progressDialog, arguments);

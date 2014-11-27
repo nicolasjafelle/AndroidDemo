@@ -2,11 +2,13 @@ package com.android.test.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 
-import roboguice.fragment.RoboFragment;
+import com.android.test.AndroidDemoApplication;
 
-public abstract class AbstractFragment<T> extends RoboFragment {
+
+public abstract class AbstractFragment<T> extends Fragment {
 
     protected T callbacks;
 
@@ -14,6 +16,7 @@ public abstract class AbstractFragment<T> extends RoboFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        AndroidDemoApplication.injectMembers(this);
 //        setRetainInstance(true);
     }
 

@@ -1,5 +1,6 @@
 package com.android.test.session;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.inject.Inject;
@@ -11,13 +12,15 @@ import java.util.Set;
 @Singleton
 public class SessionManager {
 
-    @Inject
     private SharedPreferences sharedPref;
 
+    private final String PREF_NAME = "android_demo_prefs";
     private static final String SAVED_PLACES = "saved_places";
 
     @Inject
-    public SessionManager() {}
+    public SessionManager(Context context) {
+        sharedPref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+    }
 
 
     public void savePlace(String place) {

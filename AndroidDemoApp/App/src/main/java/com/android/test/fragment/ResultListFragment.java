@@ -20,9 +20,6 @@ import com.melnykov.fab.FloatingActionButton;
 
 import javax.inject.Inject;
 
-import roboguice.inject.InjectExtra;
-import roboguice.inject.InjectView;
-
 
 public class ResultListFragment extends AbstractFragment<ResultListFragment.Callback>
         implements VenueRecyclerAdapter.RecyclerViewListener {
@@ -39,20 +36,14 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
         void onToolbarShow();
     }
 
-    @InjectExtra(value = DATA_HELPER, optional = true)
     private DataHelper dataHelper;
 
-    @InjectExtra(value = PLACE, optional = true)
     private String place;
 
-    @InjectExtra(value = LOCATION, optional = true)
     private Location currentLocation;
 
-    @InjectView(R.id.fragment_result_list_floating_button)
     private FloatingActionButton fab;
 
-    // RecyclerView impl
-    @InjectView(R.id.fragment_result_list_recyclerview)
     private RecyclerView recyclerView;
 
     @Inject
@@ -62,18 +53,37 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
     private VenueRecyclerAdapter adapter;
 
 
-	public static Fragment newInstance() {
-		return new ResultListFragment();
+	public static Fragment newInstance(DataHelper dataHelper, String place, Location currentLocation) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(DATA_HELPER, dataHelper);
+        bundle.putString(PLACE, place);
+        bundle.putParcelable(LOCATION, currentLocation);
+
+        Fragment f = new ResultListFragment();
+        f.setArguments(bundle);
+
+		return f;
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_result_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_result_list, container, false);
+
+        fab = (FloatingActionButton) view.findViewById(R.id.fragment_result_list_floating_button);
+        recyclerView = (RecyclerView) view.findViewById(R.id.fragment_result_list_recyclerview);
+
+        return view;
 	}
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+
+        if(getArguments() != null) {
+            dataHelper = (DataHelper) getArguments().getSerializable(DATA_HELPER);
+            place = getArguments().getString(PLACE);
+            currentLocation = getArguments().getParcelable(LOCATION);
+        }
 
         setupRecyclerView();
         setupFab();
@@ -94,8 +104,9 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
     private void setupRecyclerView() {
         recyclerView.setHasFixedSize(true);
 
-        // use a linear layout manager
+//        use a linear layout manager
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getActivity());
+
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 

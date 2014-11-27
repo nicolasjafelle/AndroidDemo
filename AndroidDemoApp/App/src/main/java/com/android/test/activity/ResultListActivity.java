@@ -1,6 +1,7 @@
 package com.android.test.activity;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.widget.Toolbar;
@@ -12,14 +13,13 @@ import android.view.animation.Interpolator;
 import com.android.test.R;
 import com.android.test.domain.Venue;
 import com.android.test.fragment.ResultListFragment;
+import com.android.test.utils.DataHelper;
 
-import roboguice.inject.InjectView;
 
 public class ResultListActivity extends AbstractActionBarActivity implements ResultListFragment.Callback {
 
     private final int ANIM_DURATION = 200;
 
-    @InjectView(R.id.material_toolbar)
     private Toolbar toolbar;
 
     private Interpolator mInterpolator;
@@ -28,6 +28,7 @@ public class ResultListActivity extends AbstractActionBarActivity implements Res
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        toolbar = (Toolbar) findViewById(R.id.material_toolbar);
         mInterpolator = new AccelerateDecelerateInterpolator();
 
         setSupportActionBar(toolbar);
@@ -36,7 +37,19 @@ public class ResultListActivity extends AbstractActionBarActivity implements Res
 
     @Override
     protected void setInitialFragment() {
-        setInitialFragment(R.layout.activity_main_overlay, R.id.container, ResultListFragment.newInstance());
+
+        DataHelper dataHelper = null;
+        String place = null;
+        Location location = null;
+
+        if(getIntent().getExtras() != null) {
+            Bundle bundle = getIntent().getExtras();
+            dataHelper = (DataHelper) bundle.getSerializable(ResultListFragment.DATA_HELPER);
+            place = bundle.getString(ResultListFragment.PLACE);
+            location = bundle.getParcelable(ResultListFragment.LOCATION);
+        }
+
+        setInitialFragment(R.layout.activity_main_overlay, R.id.container, ResultListFragment.newInstance(dataHelper, place, location));
     }
 
     @Override

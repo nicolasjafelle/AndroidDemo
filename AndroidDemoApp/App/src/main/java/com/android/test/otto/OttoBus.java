@@ -3,8 +3,9 @@ package com.android.test.otto;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.google.inject.Singleton;
 import com.squareup.otto.Bus;
+
+import javax.inject.Singleton;
 
 /**
  * Injected Class to use Otto with a Singleton instance and to post always on the main thread.

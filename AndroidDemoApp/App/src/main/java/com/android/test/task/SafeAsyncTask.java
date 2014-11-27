@@ -31,7 +31,6 @@ import java.util.concurrent.FutureTask;
  * @param <ResultT>
  *
  */
-@Deprecated
 public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
 	public static final int DEFAULT_POOL_SIZE = 25;
 	protected static final Executor DEFAULT_EXECUTOR = Executors.newFixedThreadPool(DEFAULT_POOL_SIZE);

@@ -15,15 +15,17 @@ import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 
 import retrofit.RetrofitError;
-import roboguice.util.RoboAsyncTask;
 
 /**
  * Created by nicolas on 12/22/13.
  */
-public abstract class FoursquareAsyncTask<T> extends RoboAsyncTask<T> {
+public abstract class FoursquareAsyncTask<T> extends SafeAsyncTask<T> {
+
+    private Context context;
 
     protected FoursquareAsyncTask(Context context) {
-        super(context);
+        super();
+        this.context = context;
     }
 
     @Override
@@ -40,18 +42,18 @@ public abstract class FoursquareAsyncTask<T> extends RoboAsyncTask<T> {
 						}
 						super.onException(e);
 					}else if (retrofitError.getBody()==null){
-						Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+						Toast.makeText(this.context, e.getMessage(), Toast.LENGTH_LONG).show();
 					}else if (retrofitError.getCause() instanceof ConnectException){
-						Toast.makeText(getContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
+						Toast.makeText(this.context, R.string.connection_error, Toast.LENGTH_SHORT).show();
 					}else if (retrofitError.getCause() instanceof SocketTimeoutException){
-						Toast.makeText(getContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
+						Toast.makeText(this.context, R.string.connection_error, Toast.LENGTH_SHORT).show();
 					}else{
 						BufferedReader reader = new BufferedReader(new InputStreamReader(((RetrofitError) e).getResponse().getBody().in()));
 						FoursquareApiErrorDto errorDto = new Gson().fromJson(reader, FoursquareApiErrorDto.class);
 						onApiError(errorDto);
 					}
 				}else if(retrofitError.isNetworkError() && !isCancelled()){
-					Toast.makeText(getContext(), R.string.connection_error, Toast.LENGTH_SHORT).show();
+					Toast.makeText(this.context, R.string.connection_error, Toast.LENGTH_SHORT).show();
 				}
 			}else {
 				super.onException(e);
@@ -61,16 +63,15 @@ public abstract class FoursquareAsyncTask<T> extends RoboAsyncTask<T> {
 		}
 	}
 
+    public Context getContext() {
+        return this.context;
+    }
+
 	@Override
 	protected void onInterrupted(Exception e) {
 		Log.d("BACKGROUND_TASK", "Interrupting background task " + this);
 	}
 
 	protected abstract void onApiError(FoursquareApiErrorDto errorDto);
-
-//    protected void onActivityDestroy(@Observes OnDestroyEvent ignored ) {
-//        Log.d("BACKGROUND_TASK", "On activity destroy background task " + this);
-//        cancel(true);
-//    }
 
 }

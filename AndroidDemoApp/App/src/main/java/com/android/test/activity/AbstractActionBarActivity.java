@@ -4,12 +4,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import roboguice.activity.RoboActionBarActivity;
 
-public abstract class AbstractActionBarActivity extends RoboActionBarActivity {
+public abstract class AbstractActionBarActivity extends ActionBarActivity {
 
 	private FrameLayout mainLayout;
 

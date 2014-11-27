@@ -18,11 +18,9 @@ import com.android.test.fragment.DetailFragment;
 import com.android.test.view.ObservableScrollView;
 import com.android.test.view.VenueItemView;
 
-import roboguice.inject.InjectView;
 
 public class DetailActivity extends AbstractActionBarActivity implements DetailFragment.Callback {
 
-    @InjectView(R.id.material_toolbar)
     private Toolbar toolbar;
 
     private Drawable mActionBarBackgroundDrawable;
@@ -30,6 +28,8 @@ public class DetailActivity extends AbstractActionBarActivity implements DetailF
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        toolbar = (Toolbar) findViewById(R.id.material_toolbar);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -87,7 +87,19 @@ public class DetailActivity extends AbstractActionBarActivity implements DetailF
 
     @Override
     protected void setInitialFragment() {
-        setInitialFragment(R.layout.activity_main_overlay, R.id.container, DetailFragment.newInstance());
+
+        String url = null;
+        String name = null;
+        String distance = null;
+
+        if(getIntent().getExtras() != null) {
+            Bundle bundle = getIntent().getExtras();
+            url = bundle.getString(DetailFragment.ANIMATED_IMAGE);
+            name = bundle.getString(DetailFragment.ANIMATED_NAME);
+            distance = bundle.getString(DetailFragment.ANIMATED_DISTANCE);
+        }
+
+        setInitialFragment(R.layout.activity_main_overlay, R.id.container, DetailFragment.newInstance(url, name, distance));
     }
 
     @Override

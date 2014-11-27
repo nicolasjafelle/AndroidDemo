@@ -25,17 +25,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import roboguice.inject.InjectView;
 
 public class SideBarActivity extends AbstractActionBarActivity implements MainFragment.Callback, AdapterView.OnItemClickListener {
 
-    @InjectView(R.id.material_toolbar)
     private Toolbar toolbar;
 
-    @InjectView(R.id.activity_main_drawer_layout)
     private DrawerLayout drawerLayout;
 
-    @InjectView(R.id.activity_side_bar_list_view)
     private ListView listView;
 
     private ActionBarDrawerToggle drawerToggle;
@@ -44,6 +40,10 @@ public class SideBarActivity extends AbstractActionBarActivity implements MainFr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        toolbar = (Toolbar) findViewById(R.id.material_toolbar);
+        drawerLayout = (DrawerLayout) findViewById(R.id.activity_main_drawer_layout);
+        listView = (ListView) findViewById(R.id.activity_side_bar_list_view);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);

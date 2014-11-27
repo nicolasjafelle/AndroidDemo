@@ -4,15 +4,15 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.View;
 
-import roboguice.fragment.RoboDialogFragment;
 
 
 /**
  * This Dialog is just an indeterminet progress, typically used for Background Tasks.
  */
-public class ProgressDialogFragment extends RoboDialogFragment {
+public class ProgressDialogFragment extends DialogFragment {
 
 	/**
 	 * Callback used when the user cancel or press the back button to cancel the task.
