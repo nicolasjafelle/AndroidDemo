@@ -239,7 +239,7 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
     @Subscribe
     public void onFinally(OnFinallyEvent event) {
         closeKeyboard();
-        progressDialog.dismissAllowingStateLoss();
+        DialogFragmentHelper.dismissDialog(getActivity());
     }
 
 

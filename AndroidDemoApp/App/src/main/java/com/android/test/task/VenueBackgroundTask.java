@@ -70,6 +70,5 @@ public class VenueBackgroundTask extends FoursquareAsyncTask<VenueDto> {
     protected void onFinally() throws RuntimeException {
         super.onFinally();
         ottoBus.post(new OnFinallyEvent());
-
     }
 }
