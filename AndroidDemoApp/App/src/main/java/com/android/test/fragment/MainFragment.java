@@ -3,7 +3,6 @@ package com.android.test.fragment;
 import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Process;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +19,6 @@ import com.android.test.dialog.ProgressDialogFragment;
 import com.android.test.domain.Venue;
 import com.android.test.dto.ErrorType;
 import com.android.test.dto.FoursquareApiErrorDto;
-import com.android.test.dto.VenueDto;
 import com.android.test.location.GPSTracker;
 import com.android.test.otto.OttoBus;
 import com.android.test.otto.VenueResultEvent;
@@ -28,6 +26,10 @@ import com.android.test.otto.VenueSearchEvent;
 import com.android.test.qachee.QacheeData;
 import com.android.test.session.SessionManager;
 import com.android.test.task.FoursquareAsyncTask;
+import com.android.test.task.VenueBackgroundTask;
+import com.android.test.task.event.OnApiErrorEvent;
+import com.android.test.task.event.OnFinallyEvent;
+import com.android.test.task.event.OnPreExecuteEvent;
 import com.android.test.view.SideBarCallback;
 import com.qachee.QacheeManager;
 import com.squareup.otto.Subscribe;
@@ -43,6 +45,8 @@ import javax.inject.Inject;
  */
 public class MainFragment extends AbstractFragment<MainFragment.Callback>
         implements SideBarCallback, ProgressDialogFragment.ProgressDialogFragmentListener {
+
+
 
 
     public interface Callback {
@@ -67,7 +71,7 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
 
 	private ProgressDialogFragment progressDialog;
 
-
+    @Inject
 	private GPSTracker gpsTracker;
 
     @Override
@@ -94,7 +98,6 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
 		super.onViewCreated(view, savedInstanceState);
 
         progressDialog = ProgressDialogFragment.newInstance();
-        gpsTracker = new GPSTracker(getActivity());
 
 		searchButton.setOnClickListener(onClickListener);
 	}
@@ -130,27 +133,6 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
 			}
 		}
 	};
-
-    @Subscribe
-    public void searchForVenues(VenueSearchEvent event) {
-
-        QacheeData data = (QacheeData) QacheeManager.getInstance().get((long)event.place.hashCode(), true);
-
-        if(data == null) {
-            asyncTask = new VenueTask(getActivity(), event.place, gpsTracker.getLocation());
-            asyncTask.execute();
-        }else {
-            ottoBus.post(new VenueResultEvent(event.place, gpsTracker.getLocation()));
-        }
-
-    }
-
-    @Subscribe
-    public void resultVenues(VenueResultEvent event) {
-
-        QacheeData data = (QacheeData) QacheeManager.getInstance().get((long)event.place.hashCode(), true);
-        callbacks.onResult(data.venues, event.location, data.search);
-    }
 
 
     @Override
@@ -204,69 +186,61 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
         }
     }
 
-	/**
-	 * VenueTask
-	 */
-	public class VenueTask extends FoursquareAsyncTask<VenueDto> {
+    private void closeKeyboard() {
+        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+    }
 
-		private String criteria;
-		private Location currentLocation;
 
-		public VenueTask(Context context, String criteria, Location currentLocation) {
-			super(context);
-			this.criteria = criteria;
-			this.currentLocation = currentLocation;
-		}
+    /* ********************************************************* */
+    /* **************** Otto Subscribers *********************** */
+    /* ********************************************************* */
 
-		@Override
-		protected void onPreExecute() throws Exception {
-			super.onPreExecute();
-			createProgressDialog(R.string.connecting_to_foursquare);
-		}
+    @Subscribe
+    public void searchForVenues(VenueSearchEvent event) {
 
-		@Override
-		public VenueDto call() throws Exception {
-            android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
-			return foursquareClient.searchForVenues(this.criteria);
-		}
+        QacheeData data = (QacheeData) QacheeManager.getInstance().get((long)event.place.hashCode(), true);
 
-		@Override
-		protected void onSuccess(VenueDto venueDto) throws Exception {
-			super.onSuccess(venueDto);
+        if(data == null) {
+            asyncTask = new VenueBackgroundTask(getActivity(), event.place, gpsTracker.getLocation());
+            asyncTask.execute();
+        }else {
+            ottoBus.post(new VenueResultEvent(data.venues, event.place, gpsTracker.getLocation()));
+        }
+    }
 
-            if(!isCancelled()) {
-                List<Venue> venues = venueDto.getResponse().getVenues();
-                if(venues == null || venues.size() == 0) {
-                    Toast.makeText(getContext(), R.string.no_results_found, Toast.LENGTH_SHORT).show();
-                }else {
-                    QacheeManager.getInstance().add(new QacheeData(criteria, venues));
-                    ottoBus.post(new VenueResultEvent(criteria, currentLocation));
-                }
-            }
-		}
+    @Subscribe
+    public void resultVenues(VenueResultEvent event) {
+        if(event.venues == null || event.venues.size() == 0) {
+            Toast.makeText(getActivity(), R.string.no_results_found, Toast.LENGTH_SHORT).show();
+        }else {
+            QacheeManager.getInstance().add(new QacheeData(event.place, event.venues));
+            callbacks.onResult(event.venues, event.location, event.place);
+        }
+    }
 
-		@Override
-		protected void onApiError(FoursquareApiErrorDto errorDto) {
-			if(errorDto.getMeta().getErrorType() == ErrorType.failed_geocode) {
-				Toast.makeText(getContext(), R.string.no_results_found, Toast.LENGTH_SHORT).show();
-			}else {
-				Toast.makeText(getContext(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
-			}
-		}
+    @Subscribe
+    public void onPreExecute(OnPreExecuteEvent event) {
+        createProgressDialog(R.string.connecting_to_foursquare);
+    }
 
-		private void closeKeyboard() {
-			InputMethodManager imm = (InputMethodManager)getContext().getSystemService(
-				Context.INPUT_METHOD_SERVICE);
-			imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-		}
+    @Subscribe
+    public void onApiError(OnApiErrorEvent event) {
+        FoursquareApiErrorDto errorDto = event.errorDto;
 
-		@Override
-		protected void onFinally() throws RuntimeException {
-			super.onFinally();
-            closeKeyboard();
-            progressDialog.dismissAllowingStateLoss();
+        if(errorDto.getMeta().getErrorType() == ErrorType.failed_geocode) {
+            Toast.makeText(getActivity(), R.string.no_results_found, Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(getActivity(), R.string.unknown_error, Toast.LENGTH_SHORT).show();
+        }
+    }
 
-		}
-	}
+    @Subscribe
+    public void onFinally(OnFinallyEvent event) {
+        closeKeyboard();
+        progressDialog.dismissAllowingStateLoss();
+    }
+
 
 }

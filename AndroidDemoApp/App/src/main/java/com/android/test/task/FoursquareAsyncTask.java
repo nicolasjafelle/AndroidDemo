@@ -33,7 +33,6 @@ public abstract class FoursquareAsyncTask<T> extends SafeAsyncTask<T> {
 		try {
 			if(e instanceof RetrofitError) {
 				RetrofitError retrofitError = (RetrofitError) e;
-
 				if(retrofitError.getResponse() != null) {
 					if (retrofitError.getResponse().getStatus() > 500 ){
 						String msg = "Network error HTTP ("+retrofitError.getResponse().getStatus()+")";

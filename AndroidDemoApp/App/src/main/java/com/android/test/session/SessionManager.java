@@ -4,12 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.inject.Inject;
-import com.google.inject.Singleton;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Singleton
 public class SessionManager {
 
     private SharedPreferences sharedPref;

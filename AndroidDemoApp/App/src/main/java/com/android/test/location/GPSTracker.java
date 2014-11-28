@@ -13,6 +13,8 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
 
+import javax.inject.Inject;
+
 
 /**
  * Taken from http://stackoverflow.com/questions/19722712/get-user-current-location-android
@@ -44,6 +46,7 @@ public class GPSTracker extends Service implements LocationListener {
 	// Declaring a Location Manager
 	protected LocationManager locationManager;
 
+    @Inject
 	public GPSTracker(Context context) {
 		this.mContext = context;
 		getLocation();

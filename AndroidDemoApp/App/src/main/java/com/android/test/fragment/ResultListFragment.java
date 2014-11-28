@@ -28,8 +28,6 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
     public static final String PLACE = "place";
     public static final String LOCATION = "location";
 
-
-
     public interface Callback {
         void onItemClick(Venue venue, View view, String url);
         void onToolbarHide();

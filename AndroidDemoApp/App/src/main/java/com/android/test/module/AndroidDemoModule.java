@@ -21,5 +21,6 @@ public class AndroidDemoModule extends AbstractModule {
             }
         });
 //        .in(Singleton.class);
+
     }
 }
