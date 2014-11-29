@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.test.AndroidDemoApplication;
 import com.android.test.R;
 import com.android.test.dto.FoursquareApiErrorDto;
 import com.google.gson.Gson;
@@ -14,6 +15,8 @@ import java.io.InputStreamReader;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 
+import javax.inject.Inject;
+
 import retrofit.RetrofitError;
 
 /**
@@ -21,11 +24,12 @@ import retrofit.RetrofitError;
  */
 public abstract class FoursquareAsyncTask<T> extends SafeAsyncTask<T> {
 
+    @Inject
     private Context context;
 
-    protected FoursquareAsyncTask(Context context) {
+    protected FoursquareAsyncTask() {
         super();
-        this.context = context;
+        AndroidDemoApplication.injectMembers(this);
     }
 
     @Override
@@ -62,8 +66,8 @@ public abstract class FoursquareAsyncTask<T> extends SafeAsyncTask<T> {
 		}
 	}
 
-    public Context getContext() {
-        return this.context;
+    public void clear() {
+        this.context = null;
     }
 
 	@Override

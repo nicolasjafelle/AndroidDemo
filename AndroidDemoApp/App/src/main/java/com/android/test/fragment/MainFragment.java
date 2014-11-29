@@ -203,7 +203,7 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
         QacheeData data = (QacheeData) QacheeManager.getInstance().get((long)event.place.hashCode(), true);
 
         if(data == null) {
-            asyncTask = new VenueBackgroundTask(getActivity(), event.place, gpsTracker.getLocation());
+            asyncTask = new VenueBackgroundTask(event.place, gpsTracker.getLocation());
             asyncTask.execute();
         }else {
             ottoBus.post(new VenueResultEvent(data.venues, event.place, gpsTracker.getLocation()));

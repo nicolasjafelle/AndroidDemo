@@ -1,9 +1,7 @@
 package com.android.test.task;
 
-import android.content.Context;
 import android.location.Location;
 
-import com.android.test.AndroidDemoApplication;
 import com.android.test.client.FoursquareClient;
 import com.android.test.domain.Venue;
 import com.android.test.dto.FoursquareApiErrorDto;
@@ -32,11 +30,10 @@ public class VenueBackgroundTask extends FoursquareAsyncTask<VenueDto> {
     private String criteria;
     private Location currentLocation;
 
-    public VenueBackgroundTask(Context context, String criteria, Location currentLocation) {
-        super(context);
+    public VenueBackgroundTask(String criteria, Location currentLocation) {
+        super();
         this.criteria = criteria;
         this.currentLocation = currentLocation;
-        AndroidDemoApplication.injectMembers(this);
     }
 
     @Override
@@ -69,6 +66,7 @@ public class VenueBackgroundTask extends FoursquareAsyncTask<VenueDto> {
     @Override
     protected void onFinally() throws RuntimeException {
         super.onFinally();
+        super.clear();
         ottoBus.post(new OnFinallyEvent());
     }
 }
