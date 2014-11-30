@@ -3,18 +3,19 @@ AndroidDemo
 
 Demo app to show how to start an Android App. This demo shows:
 
-1. How to create a Fragment and associate to an Activity.
-2. Make Asynchronous call using RoboAsyncTask.
-3. Replace Roboguice for Guice 3.0
-4. Connect to Foursquare's API using Retrofit with OkHttp and parse Json with Gson.
-5. Material Design with latest AppCompat library (version 21) and animations like Google+ and Google Play.
-6. Side Bar implementation.
-7. RecyclerView implementation with onClickListener, View Types and OnScrollListener
-8. Use of GPS.
-9. Persists data with Qachee.
-10. Use of Square Otto to use an event bus.
-11. Use of Proguard to reduce apk size.
-12. Two ways to handle release keystore and it values to create a Release APK (ready for Google Play).
+1. How to create a Fragment and associate with Activity.
+2. Make Asynchronous call using SafeAsyncTask.
+3. Decouple SafeAsyncTask with Otto Bus.
+4. Replace Roboguice for Guice 3.0.
+5. Connect to Foursquare's API using Retrofit with OkHttp and parse Json with Gson.
+6. Material Design with latest AppCompat library (version 21) and animations like Google+ and Google Play.
+7. Side Bar implementation.
+8. RecyclerView implementation with onClickListener, View Types and OnScrollListener.
+9. Use of GPS.
+10. Persists data with Qachee.
+11. Use of Square Otto to use an event bus.
+12. Use of Proguard to reduce apk size.
+13. Two ways to handle release keystore and it values to create a Release APK (ready for Google Play).
 
 It also handle HTTP errors in a generic way (see FoursquareAsyncTask.java) and use GPSTracker to handle Geo locations.
 
