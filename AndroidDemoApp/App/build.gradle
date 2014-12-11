@@ -14,7 +14,7 @@ android {
     }
 
     compileSdkVersion 21
-    buildToolsVersion "21.1.1"
+    buildToolsVersion "21.1.2"
 
     defaultConfig {
         minSdkVersion 14
@@ -60,7 +60,7 @@ android {
 }
 
 dependencies {
-    compile 'com.google.inject:guice:3.0:no_aop'
+    compile 'com.google.inject:guice:4.0-beta5:no_aop'
 
     compile 'com.melnykov:floatingactionbutton:1.0.5'
     compile 'com.android.support:appcompat-v7:21.0.+'
