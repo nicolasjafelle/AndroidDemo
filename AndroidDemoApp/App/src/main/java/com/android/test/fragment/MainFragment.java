@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.test.AndroidDemoApplication;
 import com.android.test.R;
 import com.android.test.client.FoursquareClient;
 import com.android.test.dialog.DialogFragmentHelper;
@@ -192,6 +193,8 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
         imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
 
+    @Inject
+    AndroidDemoApplication application;
 
     /* ********************************************************* */
     /* **************** Otto Subscribers *********************** */
@@ -200,7 +203,7 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
     @Subscribe
     public void searchForVenues(VenueSearchEvent event) {
 
-        QacheeData data = (QacheeData) QacheeManager.getInstance().get((long)event.place.hashCode(), true);
+        QacheeData data = (QacheeData) QacheeManager.getInstance().get(event.place, true);
 
         if(data == null) {
             asyncTask = new VenueBackgroundTask(event.place, gpsTracker.getLocation());

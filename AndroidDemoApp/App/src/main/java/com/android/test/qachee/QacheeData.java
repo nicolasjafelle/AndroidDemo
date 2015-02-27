@@ -21,7 +21,7 @@ public class QacheeData extends QacheeableObject {
     }
 
     @Override
-    public Long getKey() {
-        return (long) this.search.hashCode();
+    public String getKey() {
+        return search;
     }
 }

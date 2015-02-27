@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,8 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
     public static final String DATA_HELPER = "data_helper";
     public static final String PLACE = "place";
     public static final String LOCATION = "location";
+
+
 
     public interface Callback {
         void onItemClick(Venue venue, View view, String url);
@@ -113,7 +116,10 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
 
 
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            boolean isShowing = true;
+
+            private static final int HIDE_THRESHOLD = 10;
+            private int scrolledDistance = 0;
+            private boolean isShowing = true;
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -124,20 +130,33 @@ public class ResultListFragment extends AbstractFragment<ResultListFragment.Call
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if (dy > 0) {
-                    if (isShowing) {
-                        callbacks.onToolbarHide();
-                        fab.hide();
-                        isShowing = false;
-                    }
-                } else {
+                int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+
+                if (firstVisibleItem == 0) {
                     if (!isShowing) {
                         callbacks.onToolbarShow();
                         fab.show();
                         isShowing = true;
                     }
+                }else if (scrolledDistance > HIDE_THRESHOLD && isShowing) {
+                    callbacks.onToolbarHide();
+                    fab.hide();
+                    isShowing = false;
+                    scrolledDistance = 0;
+
+                } else if (scrolledDistance < -HIDE_THRESHOLD && !isShowing) {
+                    callbacks.onToolbarShow();
+                    fab.show();
+                    isShowing = true;
+                    scrolledDistance = 0;
+                }
+
+                if((isShowing && dy > 0) || (!isShowing && dy < 0)) {
+                    scrolledDistance = scrolledDistance + dy;
+                    Log.i("RECYCLER VIEW", "CURRENT AMOUNT VERTICAL SCROLL = " + scrolledDistance);
                 }
             }
+
         });
     }
 

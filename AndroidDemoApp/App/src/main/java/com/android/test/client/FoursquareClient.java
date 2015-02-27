@@ -2,8 +2,10 @@ package com.android.test.client;
 
 import com.android.test.dto.VenueDto;
 import com.google.inject.Singleton;
+import com.squareup.okhttp.OkHttpClient;
 
 import retrofit.RestAdapter;
+import retrofit.client.OkClient;
 
 /**
  * This class is the responsable to connect to the API. Here lies all the
@@ -23,8 +25,11 @@ public class FoursquareClient {
 	public FoursquareClient() {
 		if (restAdapter == null || foursquareClient == null) {
 
+            OkHttpClient okHttpClient = new OkHttpClient();
+
 			restAdapter = new RestAdapter.Builder()
 				.setEndpoint(BASE_URL)
+                .setClient(new OkClient(okHttpClient))
 				.setLogLevel(RestAdapter.LogLevel.FULL)
 				.build();
 
