@@ -5,11 +5,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.FrameLayout;
 
 
-public abstract class AbstractActionBarActivity extends ActionBarActivity {
+public abstract class AbstractActionBarActivity extends AppCompatActivity {
 
 	private FrameLayout mainLayout;
 

@@ -8,7 +8,7 @@ Demo app to show how to start an Android App. This demo shows:
 3. Decouple SafeAsyncTask with Otto Bus.
 4. Replace Roboguice for Guice 3.0.
 5. Connect to Foursquare's API using Retrofit with OkHttp and parse Json with Gson.
-6. Material Design with latest AppCompat library (version 21) and animations like Google+ and Google Play.
+6. Material Design with latest AppCompat library (version 22.1) and animations like Google+ and Google Play. It also use latest AppCompat Widgets.
 7. Side Bar implementation.
 8. RecyclerView implementation with onClickListener, View Types and OnScrollListener.
 9. Use of GPS.

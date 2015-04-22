@@ -4,6 +4,8 @@ import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatEditText;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,9 +57,9 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
         void loadSavedPlaces(Set<String> savedPlaces, SideBarCallback sideBarCallback);
     }
 
-	private EditText editText;
+	private AppCompatEditText editText;
 
-	private Button searchButton;
+	private AppCompatButton searchButton;
 
     private FoursquareAsyncTask asyncTask;
 
@@ -88,8 +90,8 @@ public class MainFragment extends AbstractFragment<MainFragment.Callback>
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        editText = (EditText) view.findViewById(R.id.fragment_main_edittext);
-        searchButton = (Button) view.findViewById(R.id.fragment_main_button);
+        editText = (AppCompatEditText) view.findViewById(R.id.fragment_main_edittext);
+        searchButton = (AppCompatButton) view.findViewById(R.id.fragment_main_button);
 
         return view;
 	}

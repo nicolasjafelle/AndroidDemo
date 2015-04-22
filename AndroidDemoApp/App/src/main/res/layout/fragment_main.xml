@@ -15,14 +15,14 @@
             android:text="@string/type_your_criteria"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-        <EditText
+        <android.support.v7.widget.AppCompatEditText
             android:id="@+id/fragment_main_edittext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/edit_text_hint"
             android:singleLine="true"
             android:inputType="textCapWords"/>
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/fragment_main_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
